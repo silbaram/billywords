@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mariadb://localhost:3306/billywords</property>
+    <property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
+      <mapping class="com.billywords.user.models.UsersEntity"/>
+      <mapping class="com.billywords.security.models.AuthorityEntity"/>
+      <mapping class="com.billywords.words.models.ExampleEntity"/>
+      <mapping class="com.billywords.words.models.ExampleHasWordSpellingEntity"/>
+      <mapping class="com.billywords.words.models.WordSpellingEntity"/>
+      <mapping class="com.billywords.words.models.WordsGroupEntity"/>
+      <mapping class="com.billywords.words.models.LearningWordsEntity"/>
+      <!-- <property name="connection.username"/> -->
+    <!-- <property name="connection.password"/> -->
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>

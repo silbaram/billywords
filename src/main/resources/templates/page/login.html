@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+                layout:decorator="layouts/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Billy Words Test Login</title>
+    <link rel="stylesheet" href="/static/css/commmon.css">
+</head>
+<body>
+
+    <div id="wrapper" layout:fragment="content">
+        <section>
+            <form class="login_contain" action="/login_act" method="post">
+                <div class="lang-list">
+                    <label for="language"><img src="/static/images/svg/lang.svg" alt="" height="50"></label>
+                    <select onchange="optSelValue()" name="prefecture" id="language" autofocus required>
+                        <option value="Check overlap ID">Your language</option>
+                        <option value="cn">CN 中国</option>
+                        <option value="de">DE Deutschland</option>
+                        <option value="es">ES Español</option>
+                        <option value="fr">FR France</option>
+                        <option value="id">ID Indonesia</option>
+                        <option value="in">IN हिन्दी</option>
+                        <option value="jp">JP 日本</option>
+                        <option value="kr">KR 대한민국</option>
+                        <option value="pt">PT Português</option>
+                        <option value="ru">RU Pусский</option>
+                        <option value="sa">SA السعودية</option>
+                        <option value="vn">VN Việt</option>
+                    </select>
+                </div>
+                <div class="username">
+                    <label for="username"><img src="/static/images/svg/id.svg" alt="" height="50"></label>
+                    <input type="email" name="email" id="username" placeholder="Email"  required>
+                </div>
+                <div class="password">
+                    <label for="password"><img src="/static/images/svg/pass.svg" alt="" height="50"></label>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="submit">
+                    <input type="submit" value="Login"><br>
+                </div>
+                <div class="remember">
+                    <label>
+                        <input type="checkbox" name="remember" >Remember me
+                    </label>
+                </div>
+            </form>
+            <div class="line"></div>
+
+            <div class="lostpass">
+                <a href="../04/html/billyLostPassword.html">Forgot Password?</a>
+            </div>
+            <div class="signup">
+                <a href="/registration">Sign Up</a>
+            </div>
+        </section>
+    </div>
+
+    <script src="/static/js/countryCode.js"></script>
+</body>
+</html>
