@@ -45,17 +45,12 @@
                 <p>Adjective</p>
             </div>
             <div class="words_word">
-                <h2>words111111</h2>
+                <h2 th:text="${learningWord}">learningWord</h2>
             </div>
         </div>
         <div class="anser_contain">
-            <div class="anser">
-                <p>1</p>
-                <p>2</p>
-                <p>3</p>
-                <p>4</p>
-                <p>5</p>
-                <p>6</p>
+            <div class="anser" th:each="example, i : ${learningWordsExampleList}">
+                <p th:text="${example.getWordSpellingEntity().getWordSpelling()}"></p>
             </div>
         </div>
         <div class="hint_contain">

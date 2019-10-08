@@ -7,10 +7,13 @@ import com.billywords.user.repository.UsersEntityRepository;
 import com.billywords.words.models.ExampleEntity;
 import com.billywords.words.models.LearningWordsEntity;
 import com.billywords.words.models.WordSpellingEntity;
+import com.billywords.words.models.WordsGroupEntity;
 import com.billywords.words.repository.LearningWordsEntityRepository;
 import com.billywords.words.repository.WordSpellingEntityRepository;
+import com.billywords.words.repository.WordsGroupEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,75 +40,86 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     @Autowired
     UsersEntityRepository usersEntityRepository;
 
+    @Autowired
+    WordsGroupEntityRepository wordsGroupEntityRepository;
 
-    /**
+
+        /**
      * 현재 학습 중인 문제를 가져온다.
      * @param isLearning
      * @return
      */
     @Override
     public LearningWordsEntity getLearningWordsEntity(Integer id, Boolean isLearning) {
-        Optional<UsersEntity> byIdOptional = usersEntityRepository.findById(id);
-        if(byIdOptional.isPresent()) {
-            LearningWordsEntity learningWordsEntity = learningWordsEntityRepository.findByUsersEntityAndIsLearning(byIdOptional.get(), isLearning);
-
-            return learningWordsEntity;
-        } else {
-            return null;
-        }
+        Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
+        return usersEntityOptional.map(usersEntity -> learningWordsEntityRepository.findByUsersEntityAndIsLearning(usersEntity, isLearning)).orElse(null);
     }
 
 
 
     /**
-     * 사용자 학습 목록 중 보기를 만들어 준다.
+     * 사용자 학습 문제의 보기를 만들어 준다.
      * @param id
      */
     @Override
     public List<ExampleEntity> createWordExample(Integer id) {
-        int[] exampleNumber = new int[6];
-        int isExampleMakeNumber = 0;
+        final List<ExampleEntity> exampleEntityList = new ArrayList<>();
 
-        // 보기 목록 뽑기
-        Random random = new Random();
-        while(true) {
-            if(isExampleMakeNumber == 5) {
-                break;
-            }
+        //유저 정보를 찾는다
+        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
+        if(usersEntityOptional.isPresent()) {
 
-            int check = random.nextInt(maxNumber);
-            for(int makeCheck : exampleNumber) {
-                if(makeCheck == check) {
-                    check = -1;
+            //유저의 학습중인 정보
+            final LearningWordsEntity learningWordsEntity = learningWordsEntityRepository.findByUsersEntityAndIsLearning(usersEntityOptional.get(), true);
+
+            int[] exampleNumber = new int[6];
+            int isExampleMakeNumber = 0;
+
+            // 보기 목록 뽑기
+            Random random = new Random();
+            while(true) {
+                if(isExampleMakeNumber == 5) {
                     break;
+                }
+
+                int check = random.nextInt(maxNumber);
+                for(int makeCheck : exampleNumber) {
+                    if(makeCheck == check) {
+                        check = -1;
+                        break;
+                    }
+                }
+
+                if(check > 0) {
+                    exampleNumber[isExampleMakeNumber] = check;
+                    isExampleMakeNumber++;
                 }
             }
 
-            if(check > 0) {
-                exampleNumber[isExampleMakeNumber] = check;
-                isExampleMakeNumber++;
-            }
-        }
+            //정답 보기를 랜덤으로 자리 잡아 준다
+            int changeExample =  random.nextInt(5);
+            exampleNumber[5] = exampleNumber[changeExample];
+            exampleNumber[changeExample] = learningWordsEntity.getId();
 
+            //보기 저장
+            int orderNumber = 0;
+            for(int makeCheck : exampleNumber) {
+                System.out.println(makeCheck);
+//                Optional<WordSpellingEntity> wordSpellingEntityByIdOptional = wordSpellingEntityRepository.findById(makeCheck);
+                //TODO 언어코드 부분을 저장하고 가져오는 부분이 만들어져야됨
+                WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findById(makeCheck), "KO");
 
-        System.out.println("======================================");
-        //보기 저장
-        int orderNumber = 0;
-        List<ExampleEntity> exampleEntityList = new ArrayList<>();
-        for(int makeCheck : exampleNumber) {
-            System.out.println(makeCheck);
-            Optional<WordSpellingEntity> wordSpellingEntityByIdOptional = wordSpellingEntityRepository.findById(makeCheck);
-
-            if(wordSpellingEntityByIdOptional.isPresent()) {
                 ExampleEntity exampleEntity = new ExampleEntity();
+                exampleEntity.setLearningWordsEntity(learningWordsEntity);
                 exampleEntity.setOrderNumber(orderNumber);
-                exampleEntity.setWordSpellingEntity(wordSpellingEntityByIdOptional.get());
+                exampleEntity.setWordSpellingEntity(wordSpellingEntity);
                 exampleEntityList.add(exampleEntity);
                 orderNumber++;
-            }
-        }
 
-        exampleEntityRepository.saveAll(exampleEntityList);
+            }
+
+            exampleEntityRepository.saveAll(exampleEntityList);
+        }
 
         return exampleEntityList;
     }
