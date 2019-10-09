@@ -6,9 +6,11 @@ import com.billywords.words.models.LearningWordsEntity;
 import java.util.List;
 
 public interface BillyWordsLearningService {
-    public List<ExampleEntity> createWordExample(Integer id);
+    public List<ExampleEntity> createWordExample(Integer id, LearningWordsEntity learningWordsEntity);
 
     public LearningWordsEntity getLearningWordsEntity(Integer userEmail, Boolean isLearning);
 
-    public List<ExampleEntity> getExampleEntityList(String userEmail);
+    public boolean isWordQuestionCorrect();
+
+//    public List<ExampleEntity> getExampleEntityList(String userEmail);
 }

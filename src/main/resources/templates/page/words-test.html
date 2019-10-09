@@ -42,7 +42,7 @@
     <section>
         <div class="words_contain">
             <div class="words_part">
-                <p>Adjective</p>
+                <p th:text="${part}">Adjective</p>
             </div>
             <div class="words_word">
                 <h2 th:text="${learningWord}">learningWord</h2>
@@ -50,7 +50,7 @@
         </div>
         <div class="anser_contain">
             <div class="anser" th:each="example, i : ${learningWordsExampleList}">
-                <p th:text="${example.getWordSpellingEntity().getWordSpelling()}"></p>
+                <p th:text="${example.getWordSpellingEntity().getWordSpelling()}" th:value="${example.getWordSpellingEntity().getWordsGroupEntity().getId()}" onclick="isWordQuestionCorrect(this)"></p>
             </div>
         </div>
         <div class="hint_contain">
@@ -58,13 +58,15 @@
         </div>
 
     </section>
+
+    <script src="/js/menuDrop.js"></script>
+    <script src="/js/changeLang.js"></script>
+    <script src="/js/changeWordPart.js"></script>
+    <script src="/js/ajax/wordsTest.js"></script>
 </div>
+
 <footer>
     <p>by SJS 2019</p>
 </footer>
-
-<script src="/static/js/menuDrop.js"></script>
-<script src="/static/js/changeLang.js"></script>
-<script src="/static/js/changeWordPart.js"></script>
 </body>
 </html>

@@ -30,12 +30,12 @@ public class BillyWordsTestServiceTest {
 
 
 
-    @Test
+//    @Test
     public void 문제만들기테스트() {
 //        billyWordsLearningService.createWordExample("4");
 
-        List<ExampleEntity> exampleEntityList = billyWordsLearningService.getExampleEntityList("aaa@aaa.com");
-        System.out.println(exampleEntityList.toString());
+//        List<ExampleEntity> exampleEntityList = billyWordsLearningService.getExampleEntityList("aaa@aaa.com");
+//        System.out.println(exampleEntityList.toString());
     }
 
 }

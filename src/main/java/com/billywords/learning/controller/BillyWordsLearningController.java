@@ -1,6 +1,7 @@
 package com.billywords.learning.controller;
 
 import com.billywords.learning.service.impl.BillyWordsLearningServiceImpl;
+import com.billywords.learning.vo.WordsProblem;
 import com.billywords.user.vo.WordUser;
 import com.billywords.words.models.ExampleEntity;
 import com.billywords.words.models.LearningWordsEntity;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 
 @Controller
+@RequestMapping(value = "/words-test")
 public class BillyWordsLearningController {
 
     @Autowired
@@ -25,9 +27,14 @@ public class BillyWordsLearningController {
 
 
 
-    // 단어 테스트 페이지
-    @RequestMapping("/words-test")
-    public String login(Model model, String error, String logout, HttpServletRequest request, @AuthenticationPrincipal WordUser wordUser){
+    /**
+     * 단어 테스트 페이지
+     * @param model
+     * @param wordUser
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public String login(Model model, @AuthenticationPrincipal WordUser wordUser){
 
         //학습중인 단어
         LearningWordsEntity learningWordsEntity = null;
@@ -41,7 +48,7 @@ public class BillyWordsLearningController {
 
             if(learningWordsEntity.getExampleEntityList().size() == 0) {
                 //학습을 위한 분제 보기를 만든다
-                List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId());
+                List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId(), learningWordsEntity);
                 model.addAttribute("learningWordsExampleList", exampleEntityList);
             } else {
                 model.addAttribute("learningWordsExampleList", learningWordsEntity.getExampleEntityList());
@@ -53,7 +60,21 @@ public class BillyWordsLearningController {
         Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
 
         model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
+        model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
 
         return "page/words-test";
+    }
+
+
+
+    //문제 풀기 ajax
+    @ResponseBody
+    @RequestMapping(value = "/problem", method = RequestMethod.PATCH)
+    public String wordsProblem(@RequestParam WordsProblem wordsProblem, Model model, @AuthenticationPrincipal WordUser wordUser) {
+
+
+        System.out.println("wordsProblem : " + wordsProblem.getObjId());
+
+        return "success";
     }
 }

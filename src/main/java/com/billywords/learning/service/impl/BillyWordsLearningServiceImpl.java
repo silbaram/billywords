@@ -60,17 +60,15 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     /**
      * 사용자 학습 문제의 보기를 만들어 준다.
      * @param id
+     * @param learningWordsEntity
      */
     @Override
-    public List<ExampleEntity> createWordExample(Integer id) {
+    public List<ExampleEntity> createWordExample(Integer id, LearningWordsEntity learningWordsEntity) {
         final List<ExampleEntity> exampleEntityList = new ArrayList<>();
 
         //유저 정보를 찾는다
         final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
         if(usersEntityOptional.isPresent()) {
-
-            //유저의 학습중인 정보
-            final LearningWordsEntity learningWordsEntity = learningWordsEntityRepository.findByUsersEntityAndIsLearning(usersEntityOptional.get(), true);
 
             int[] exampleNumber = new int[6];
             int isExampleMakeNumber = 0;
@@ -84,7 +82,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
                 int check = random.nextInt(maxNumber);
                 for(int makeCheck : exampleNumber) {
-                    if(makeCheck == check) {
+                    if(check == 0 || makeCheck == check) {
                         check = -1;
                         break;
                     }
@@ -97,9 +95,11 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             }
 
             //정답 보기를 랜덤으로 자리 잡아 준다
+            //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
+            Optional<WordSpellingEntity> spellingEntityOptional = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
             int changeExample =  random.nextInt(5);
             exampleNumber[5] = exampleNumber[changeExample];
-            exampleNumber[changeExample] = learningWordsEntity.getId();
+            exampleNumber[changeExample] = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getId() : 1;
 
             //보기 저장
             int orderNumber = 0;
@@ -124,18 +124,20 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         return exampleEntityList;
     }
 
-
-
     @Override
-    public List<ExampleEntity> getExampleEntityList(String userEmail) {
-        Random random = new Random();
-        List<LearningWordsEntity> learningWordsEntityList = learningWordsEntityRepository.findByUsersEntity(usersEntityRepository.findByEmail(userEmail));
-
-        //사용자가 학습중인 문제리스트가 없다면 만들어 준다.
-        if(learningWordsEntityList.size() == 0) {
-
-        }
-
-        return learningWordsEntityList.get(random.nextInt(10)).getExampleEntityList();
+    public boolean isWordQuestionCorrect() {
+        return false;
     }
+//    @Override
+//    public List<ExampleEntity> getExampleEntityList(String userEmail) {
+//        Random random = new Random();
+//        List<LearningWordsEntity> learningWordsEntityList = learningWordsEntityRepository.findByUsersEntity(usersEntityRepository.findByEmail(userEmail));
+//
+//        //사용자가 학습중인 문제리스트가 없다면 만들어 준다.
+//        if(learningWordsEntityList.size() == 0) {
+//
+//        }
+//
+//        return learningWordsEntityList.get(random.nextInt(10)).getExampleEntityList();
+//    }
 }
