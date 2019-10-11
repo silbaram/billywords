@@ -1,21 +1,21 @@
 package com.billywords.learning.controller;
 
+import com.billywords.cost.CommonCode;
 import com.billywords.learning.service.impl.BillyWordsLearningServiceImpl;
-import com.billywords.learning.vo.WordsProblem;
+import com.billywords.learning.vo.WordsProblemVO;
 import com.billywords.user.vo.WordUser;
 import com.billywords.words.models.ExampleEntity;
 import com.billywords.words.models.LearningWordsEntity;
 import com.billywords.words.models.WordSpellingEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -70,11 +70,13 @@ public class BillyWordsLearningController {
     //문제 풀기 ajax
     @ResponseBody
     @RequestMapping(value = "/problem", method = RequestMethod.PATCH)
-    public String wordsProblem(@RequestParam WordsProblem wordsProblem, Model model, @AuthenticationPrincipal WordUser wordUser) {
+    public ResponseEntity<?> wordsProblem(@RequestBody WordsProblemVO wordsProblem, Model model, @AuthenticationPrincipal WordUser wordUser) {
 
 
-        System.out.println("wordsProblem : " + wordsProblem.getObjId());
+        System.out.println("wordsProblem : " + wordsProblem.getChooseExampleId());
 
-        return "success";
+        billyWordsLearningService.isWordQuestionCorrect(wordUser.getUserId(), wordsProblem);
+
+        return ResponseEntity.ok(wordsProblem);
     }
 }

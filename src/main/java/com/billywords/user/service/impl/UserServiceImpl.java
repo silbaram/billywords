@@ -79,6 +79,8 @@ public class UserServiceImpl implements UserService {
             LearningWordsEntity learningWordsEntity = new LearningWordsEntity();
             learningWordsEntity.setUsersEntity(usersEntity);
             learningWordsEntity.setWordsGroupEntity(wordsGroupEntity);
+            learningWordsEntity.setWrongCount(0);
+            learningWordsEntity.setCorrectCount(0);
             if(isLearning == isLearningCheckNumber) {
                 learningWordsEntity.setIsLearning(true);
             } else {

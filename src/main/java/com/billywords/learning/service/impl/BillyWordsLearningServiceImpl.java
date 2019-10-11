@@ -1,7 +1,9 @@
 package com.billywords.learning.service.impl;
 
+import com.billywords.cost.CommonCode;
 import com.billywords.learning.repository.ExampleEntityRepository;
 import com.billywords.learning.service.BillyWordsLearningService;
+import com.billywords.learning.vo.WordsProblemVO;
 import com.billywords.user.models.UsersEntity;
 import com.billywords.user.repository.UsersEntityRepository;
 import com.billywords.words.models.ExampleEntity;
@@ -44,7 +46,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     WordsGroupEntityRepository wordsGroupEntityRepository;
 
 
-        /**
+    /**
      * 현재 학습 중인 문제를 가져온다.
      * @param isLearning
      * @return
@@ -124,20 +126,26 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         return exampleEntityList;
     }
 
+
+    /**
+     * 현재 학습중인 단어를 가져와서 보기에서 센택한 값과 배교
+     * @param id
+     * @param wordsProblem
+     */
     @Override
-    public boolean isWordQuestionCorrect() {
-        return false;
+    public void isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem) {
+
+        LearningWordsEntity learningWordsEntity = getLearningWordsEntity(id, true);
+
+        if(wordsProblem.getChooseExampleId().equals(learningWordsEntity.getId().toString())) {
+            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
+            learningWordsEntity.setCorrectCount(learningWordsEntity.getCorrectCount() + 1);
+        } else {
+            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.FAIL);
+            learningWordsEntity.setWrongCount(learningWordsEntity.getWrongCount() + 1);
+        }
+
+        learningWordsEntityRepository.save(learningWordsEntity);
+
     }
-//    @Override
-//    public List<ExampleEntity> getExampleEntityList(String userEmail) {
-//        Random random = new Random();
-//        List<LearningWordsEntity> learningWordsEntityList = learningWordsEntityRepository.findByUsersEntity(usersEntityRepository.findByEmail(userEmail));
-//
-//        //사용자가 학습중인 문제리스트가 없다면 만들어 준다.
-//        if(learningWordsEntityList.size() == 0) {
-//
-//        }
-//
-//        return learningWordsEntityList.get(random.nextInt(10)).getExampleEntityList();
-//    }
 }
