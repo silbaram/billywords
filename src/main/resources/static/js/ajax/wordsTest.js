@@ -21,7 +21,11 @@ function isWordQuestionCorrect(obj) {
 
 function successFunction(data){
     console.log("successFunction", data);
-    nextExample();
+
+    //TODO 현재 풀고 있는 문제의 보기를 몇개 틀렸을때 다음으로 넘어갈지 경정해야됨
+    // nextExample();
+
+    nextExamQuestion();
 }
 
 function failFunction(data){
@@ -33,6 +37,15 @@ function nextExample() {
     var frm = document.nextExample;
 
     frm.action = "/words-test/next/example";
-    frm.method = "get";
+    frm.method = "post";
+    frm.submit();
+}
+
+function nextExamQuestion() {
+    console.log("nextExample");
+    var frm = document.nextExample;
+
+    frm.action = "/words-test/next/exam-question";
+    frm.method = "post";
     frm.submit();
 }

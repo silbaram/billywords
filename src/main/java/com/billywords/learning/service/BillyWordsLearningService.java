@@ -14,5 +14,7 @@ public interface BillyWordsLearningService {
 
     public boolean isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem);
 
-    public LearningWordsEntity createNextLearningWordsEntity(WordUser wordUser, LearningWordsEntity learningWordsEntity);
+    public LearningWordsEntity nextLearningWordsEntity(WordUser wordUser);
+
+    public void createNextLearningWordsEntity(WordUser wordUser);
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -57,7 +58,6 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
         return usersEntityOptional.map(usersEntity -> learningWordsEntityRepository.findByUsersEntityAndIsLearning(usersEntity, isLearning)).orElse(null);
     }
-
 
 
     /**
@@ -102,7 +102,6 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             }
 
             //정답 보기를 랜덤으로 자리 잡아 준다
-
             int changeExample =  random.nextInt(5);
             exampleNumber[5] = exampleNumber[changeExample];
             exampleNumber[changeExample] = spellingEntityNumber;
@@ -110,8 +109,6 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             //보기 저장
             int orderNumber = 0;
             for(int makeCheck : exampleNumber) {
-
-//                Optional<WordSpellingEntity> wordSpellingEntityByIdOptional = wordSpellingEntityRepository.findById(makeCheck);
                 //TODO 언어코드 부분을 저장하고 가져오는 부분이 만들어져야됨
                 WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findById(makeCheck), "KO");
 
@@ -158,12 +155,14 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     /**
      * 다음 문제를 출재 하기 위해 다음문제 선택
      * @param wordUser
-     * @param learningWordsEntity
      */
     @Override
-    public LearningWordsEntity createNextLearningWordsEntity(WordUser wordUser, LearningWordsEntity learningWordsEntity) {
+    public LearningWordsEntity nextLearningWordsEntity(WordUser wordUser) {
 
         final List<LearningWordsEntity> saveLearningWordsEntityList = new ArrayList<>();
+
+        // 학습중인 단어
+        LearningWordsEntity learningWordsEntity = getLearningWordsEntity(wordUser.getUserId(), true);
 
         final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(wordUser.getUserId());
 
@@ -182,10 +181,8 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
                     learningWordsEntity.setIsLearning(false);
                     learningWordsEntity.setExampleEntityList(null);
                     saveLearningWordsEntityList.add(learningWordsEntity);
-//                    learningWordsEntityRepository.save(learningWordsEntity);
                     nextLearningWordsEntity.setIsLearning(true);
                     saveLearningWordsEntityList.add(nextLearningWordsEntity);
-//                    learningWordsEntityRepository.save(nextLearningWordsEntity);
                     break;
                 }
             }
@@ -194,6 +191,33 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         }
 
         return saveLearningWordsEntityList.stream().filter(LearningWordsEntity::getIsLearning).findFirst().orElse(null);
+    }
 
+
+    // 현재 학습한 단어를 완료하고 다음 문제랑 교체
+    public void createNextLearningWordsEntity(WordUser wordUser) {
+
+        // 학습중인 단어
+        LearningWordsEntity learningWordsEntity = getLearningWordsEntity(wordUser.getUserId(), true);
+
+        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(wordUser.getUserId());
+        if(usersEntityOptional.isPresent()) {
+            List<WordsGroupEntity> wordsGroupEntityList = usersEntityOptional.get().getLearningWordsEntityList().stream().map(LearningWordsEntity::getWordsGroupEntity).collect(Collectors.toList());
+
+            int maxId = wordsGroupEntityList.stream().map(WordsGroupEntity::getImportance).max(Integer::compare).orElse(0);
+
+            WordsGroupEntity wordsGroupEntity = wordsGroupEntityRepository.findByImportance(maxId + 1);
+            LearningWordsEntity saveLearningWordsEntity = new LearningWordsEntity();
+            saveLearningWordsEntity.setUsersEntity(usersEntityOptional.get());
+            saveLearningWordsEntity.setWordsGroupEntity(wordsGroupEntity);
+            saveLearningWordsEntity.setWrongCount(0);
+            saveLearningWordsEntity.setCorrectCount(0);
+            saveLearningWordsEntity.setHintCount("0");
+            saveLearningWordsEntity.setIsLearning(true);
+
+            learningWordsEntityRepository.save(saveLearningWordsEntity);
+        }
+
+        learningWordsEntityRepository.delete(learningWordsEntity);
     }
 }

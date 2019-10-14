@@ -76,7 +76,7 @@ public class BillyWordsLearningController {
      */
     @ResponseBody
     @RequestMapping(value = "/exam-question", method = RequestMethod.PATCH)
-    public ResponseEntity<?> wordsProblem(@RequestBody WordsProblemVO wordsProblem, Model model, @AuthenticationPrincipal WordUser wordUser) {
+    public ResponseEntity<?> wordsExamQuestion(@RequestBody WordsProblemVO wordsProblem, Model model, @AuthenticationPrincipal WordUser wordUser) {
 
         boolean isNextExample = billyWordsLearningService.isWordQuestionCorrect(wordUser.getUserId(), wordsProblem);
         wordsProblem.setNextExample(isNextExample);
@@ -85,15 +85,28 @@ public class BillyWordsLearningController {
     }
 
 
-    // 다음 문제 만들기 요청
-    @RequestMapping(value = "/next/example", method = RequestMethod.GET)
+
+    /**
+     * 다음 문제 만들기 요청
+     * @param model
+     * @param wordUser
+     * @return
+     */
+    @RequestMapping(value = "/next/example", method = RequestMethod.POST)
     public String wordsNextExample(Model model, @AuthenticationPrincipal WordUser wordUser) {
 
-        // 학습중인 단어
-        LearningWordsEntity learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
-
         // 새로 학습할 단어
-        billyWordsLearningService.createNextLearningWordsEntity(wordUser, learningWordsEntity);
+        billyWordsLearningService.nextLearningWordsEntity(wordUser);
+
+        return "redirect:/words-test";
+    }
+
+
+    //학습중인 문제를 완전히 익혔을때 그 문제르 빼고 다음 문제 가져오기
+    @RequestMapping(value = "/next/exam-question", method = RequestMethod.POST)
+    public String createNextWordsExamQuestion(Model model, @AuthenticationPrincipal WordUser wordUser) {
+
+        billyWordsLearningService.createNextLearningWordsEntity(wordUser);
 
         return "redirect:/words-test";
     }

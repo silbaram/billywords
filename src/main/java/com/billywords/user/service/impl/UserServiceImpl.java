@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
             learningWordsEntity.setWordsGroupEntity(wordsGroupEntity);
             learningWordsEntity.setWrongCount(0);
             learningWordsEntity.setCorrectCount(0);
+            learningWordsEntity.setHintCount("0");
             if(isLearning == isLearningCheckNumber) {
                 learningWordsEntity.setIsLearning(true);
             } else {
