@@ -6,6 +6,7 @@ import com.billywords.learning.service.BillyWordsLearningService;
 import com.billywords.learning.vo.WordsProblemVO;
 import com.billywords.user.models.UsersEntity;
 import com.billywords.user.repository.UsersEntityRepository;
+import com.billywords.user.vo.WordUser;
 import com.billywords.words.models.ExampleEntity;
 import com.billywords.words.models.LearningWordsEntity;
 import com.billywords.words.models.WordSpellingEntity;
@@ -68,6 +69,10 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     public List<ExampleEntity> createWordExample(Integer id, LearningWordsEntity learningWordsEntity) {
         final List<ExampleEntity> exampleEntityList = new ArrayList<>();
 
+        //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
+        Optional<WordSpellingEntity> spellingEntityOptional = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
+        int spellingEntityNumber = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getId() : 1;
+
         //유저 정보를 찾는다
         final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
         if(usersEntityOptional.isPresent()) {
@@ -84,7 +89,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
                 int check = random.nextInt(maxNumber);
                 for(int makeCheck : exampleNumber) {
-                    if(check == 0 || makeCheck == check) {
+                    if(check == 0 || makeCheck == check || spellingEntityNumber == check) {
                         check = -1;
                         break;
                     }
@@ -97,16 +102,15 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             }
 
             //정답 보기를 랜덤으로 자리 잡아 준다
-            //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
-            Optional<WordSpellingEntity> spellingEntityOptional = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
+
             int changeExample =  random.nextInt(5);
             exampleNumber[5] = exampleNumber[changeExample];
-            exampleNumber[changeExample] = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getId() : 1;
+            exampleNumber[changeExample] = spellingEntityNumber;
 
             //보기 저장
             int orderNumber = 0;
             for(int makeCheck : exampleNumber) {
-                System.out.println(makeCheck);
+
 //                Optional<WordSpellingEntity> wordSpellingEntityByIdOptional = wordSpellingEntityRepository.findById(makeCheck);
                 //TODO 언어코드 부분을 저장하고 가져오는 부분이 만들어져야됨
                 WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findById(makeCheck), "KO");
@@ -133,7 +137,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
      * @param wordsProblem
      */
     @Override
-    public void isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem) {
+    public boolean isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem) {
 
         LearningWordsEntity learningWordsEntity = getLearningWordsEntity(id, true);
 
@@ -145,7 +149,51 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             learningWordsEntity.setWrongCount(learningWordsEntity.getWrongCount() + 1);
         }
 
-        learningWordsEntityRepository.save(learningWordsEntity);
+        LearningWordsEntity reloadLearningWordsEntity = learningWordsEntityRepository.save(learningWordsEntity);
+
+        return reloadLearningWordsEntity.getCorrectCount() > reloadLearningWordsEntity.getWrongCount();
+    }
+
+
+    /**
+     * 다음 문제를 출재 하기 위해 다음문제 선택
+     * @param wordUser
+     * @param learningWordsEntity
+     */
+    @Override
+    public LearningWordsEntity createNextLearningWordsEntity(WordUser wordUser, LearningWordsEntity learningWordsEntity) {
+
+        final List<LearningWordsEntity> saveLearningWordsEntityList = new ArrayList<>();
+
+        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(wordUser.getUserId());
+
+        if(usersEntityOptional.isPresent()) {
+
+            // 기존 문제의 보기는 삭제
+            exampleEntityRepository.deleteAll(learningWordsEntity.getExampleEntityList());
+
+            List<LearningWordsEntity> learningWordsEntityList = usersEntityOptional.get().getLearningWordsEntityList();
+
+            Random random = new Random();
+            while (true) {
+                int isLearning = random.nextInt(learningWordsEntityList.size());
+                LearningWordsEntity nextLearningWordsEntity = learningWordsEntityList.get(isLearning);
+                if(learningWordsEntity.getWordsGroupEntity().getImportance() != nextLearningWordsEntity.getWordsGroupEntity().getImportance()) {
+                    learningWordsEntity.setIsLearning(false);
+                    learningWordsEntity.setExampleEntityList(null);
+                    saveLearningWordsEntityList.add(learningWordsEntity);
+//                    learningWordsEntityRepository.save(learningWordsEntity);
+                    nextLearningWordsEntity.setIsLearning(true);
+                    saveLearningWordsEntityList.add(nextLearningWordsEntity);
+//                    learningWordsEntityRepository.save(nextLearningWordsEntity);
+                    break;
+                }
+            }
+
+            learningWordsEntityRepository.saveAll(saveLearningWordsEntityList);
+        }
+
+        return saveLearningWordsEntityList.stream().filter(LearningWordsEntity::getIsLearning).findFirst().orElse(null);
 
     }
 }

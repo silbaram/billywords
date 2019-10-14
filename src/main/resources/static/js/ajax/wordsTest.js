@@ -7,8 +7,7 @@ function isWordQuestionCorrect(obj) {
 
     $.ajax({
         type: "PATCH",
-        url: "/words-test/problem",
-        // dataType: "application/json",
+        url: "/words-test/exam-question",
         contentType: "application/json",
         data: JSON.stringify(jsonData),
         success: function(data){
@@ -21,17 +20,19 @@ function isWordQuestionCorrect(obj) {
 }
 
 function successFunction(data){
-    if(data.result ==='success') {
-        var a = "함수호출 success";
-    }
-
-    alert(data);
+    console.log("successFunction", data);
+    nextExample();
 }
 
 function failFunction(data){
-    if(data.result !== 'success') {
-        var a = "함수호출 fail";
-    }
+    console.log("failFunction", data);
+}
 
-    alert(a);
+function nextExample() {
+    console.log("nextExample");
+    var frm = document.nextExample;
+
+    frm.action = "/words-test/next/example";
+    frm.method = "get";
+    frm.submit();
 }

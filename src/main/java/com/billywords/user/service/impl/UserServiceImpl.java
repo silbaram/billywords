@@ -11,6 +11,7 @@ import com.billywords.words.models.WordsGroupEntity;
 import com.billywords.words.repository.LearningWordsEntityRepository;
 import com.billywords.words.repository.WordsGroupEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private LearningWordsEntityRepository learningWordsEntityRepository;
+
+    @Value("${word.example.create.max}")
+    private int maxNumber;
 
 
 
@@ -69,9 +73,9 @@ public class UserServiceImpl implements UserService {
         usersEntity.setAuthorityEntityList(authorityEntityList);
 
         //첫 문제 목록 등록
-        List<WordsGroupEntity> wordsGroupEntityList = wordsGroupEntityRepository.findByImportanceBetween(1, 9); //TODO 문제를 가져오는 범위를 9에서 10으로 변경해야됨
+        List<WordsGroupEntity> wordsGroupEntityList = wordsGroupEntityRepository.findByImportanceBetween(1, maxNumber); //TODO 문제를 가져오는 범위를 9에서 10으로 변경해야됨
         Random random = new Random();
-        int isLearning = random.nextInt(9);
+        int isLearning = random.nextInt(wordsGroupEntityList.size()) + 1;
         int isLearningCheckNumber = 0;
         List<LearningWordsEntity> learningWordsEntityTempList = new ArrayList<>();
 

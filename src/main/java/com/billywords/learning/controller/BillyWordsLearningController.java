@@ -67,16 +67,34 @@ public class BillyWordsLearningController {
 
 
 
-    //문제 풀기 ajax
+    /**
+     * 문제 풀기 ajax
+     * @param wordsProblem
+     * @param model
+     * @param wordUser
+     * @return
+     */
     @ResponseBody
-    @RequestMapping(value = "/problem", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/exam-question", method = RequestMethod.PATCH)
     public ResponseEntity<?> wordsProblem(@RequestBody WordsProblemVO wordsProblem, Model model, @AuthenticationPrincipal WordUser wordUser) {
 
-
-        System.out.println("wordsProblem : " + wordsProblem.getChooseExampleId());
-
-        billyWordsLearningService.isWordQuestionCorrect(wordUser.getUserId(), wordsProblem);
+        boolean isNextExample = billyWordsLearningService.isWordQuestionCorrect(wordUser.getUserId(), wordsProblem);
+        wordsProblem.setNextExample(isNextExample);
 
         return ResponseEntity.ok(wordsProblem);
+    }
+
+
+    // 다음 문제 만들기 요청
+    @RequestMapping(value = "/next/example", method = RequestMethod.GET)
+    public String wordsNextExample(Model model, @AuthenticationPrincipal WordUser wordUser) {
+
+        // 학습중인 단어
+        LearningWordsEntity learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
+
+        // 새로 학습할 단어
+        billyWordsLearningService.createNextLearningWordsEntity(wordUser, learningWordsEntity);
+
+        return "redirect:/words-test";
     }
 }

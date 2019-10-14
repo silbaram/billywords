@@ -1,6 +1,7 @@
 package com.billywords.learning.service;
 
 import com.billywords.learning.vo.WordsProblemVO;
+import com.billywords.user.vo.WordUser;
 import com.billywords.words.models.ExampleEntity;
 import com.billywords.words.models.LearningWordsEntity;
 
@@ -11,5 +12,7 @@ public interface BillyWordsLearningService {
 
     public LearningWordsEntity getLearningWordsEntity(Integer userEmail, Boolean isLearning);
 
-    public void isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem);
+    public boolean isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem);
+
+    public LearningWordsEntity createNextLearningWordsEntity(WordUser wordUser, LearningWordsEntity learningWordsEntity);
 }
