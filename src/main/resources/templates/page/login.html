@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Billy Words Test Login</title>
-    <link rel="stylesheet" href="/static/css/commmon.css">
+    <link rel="stylesheet" href="/css/commmon.css">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
         <section>
             <form class="login_contain" action="/login_act" method="post">
                 <div class="lang-list">
-                    <label for="language"><img src="/static/images/svg/lang.svg" alt="" height="50"></label>
+                    <label for="language"><img src="/images/svg/lang.svg" alt="" height="50"></label>
                     <select onchange="optSelValue()" name="prefecture" id="language" autofocus required>
                         <option value="Check overlap ID">Your language</option>
                         <option value="cn">CN 中国</option>
@@ -34,11 +34,11 @@
                     </select>
                 </div>
                 <div class="username">
-                    <label for="username"><img src="/static/images/svg/id.svg" alt="" height="50"></label>
+                    <label for="username"><img src="/images/svg/id.svg" alt="" height="50"></label>
                     <input type="email" name="email" id="username" placeholder="Email"  required>
                 </div>
                 <div class="password">
-                    <label for="password"><img src="/static/images/svg/pass.svg" alt="" height="50"></label>
+                    <label for="password"><img src="/images/svg/pass.svg" alt="" height="50"></label>
                     <input type="password" name="password" id="password" placeholder="Password" required>
                 </div>
                 <div class="submit">
@@ -61,6 +61,6 @@
         </section>
     </div>
 
-    <script src="/static/js/countryCode.js"></script>
+    <script src="/js/countryCode.js"></script>
 </body>
 </html>

@@ -57,9 +57,9 @@ public class UserServiceImpl implements UserService {
         UsersEntity usersEntity = new UsersEntity();
         usersEntity.setEmail(user.getEmail());
         usersEntity.setName(user.getName());
-        usersEntity.setLanguage("KO");
-        usersEntity.setCreateDate(ts);
         usersEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        usersEntity.setLanguage("KO"); //TODO 화면에서 받는 값으로 변경해야됨
+        usersEntity.setCreateDate(ts);
         usersEntityRepository.save(usersEntity);
 
         // 사용자 권한 저장
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
         usersEntity.setAuthorityEntityList(authorityEntityList);
 
         //첫 문제 목록 등록
-        List<WordsGroupEntity> wordsGroupEntityList = wordsGroupEntityRepository.findByImportanceBetween(1, maxNumber); //TODO 문제를 가져오는 범위를 9에서 10으로 변경해야됨
+        List<WordsGroupEntity> wordsGroupEntityList = wordsGroupEntityRepository.findByImportanceBetween(1, maxNumber); //TODO 문제를 가져오는 범위를 10으로 변경해야됨
         Random random = new Random();
         int isLearning = random.nextInt(wordsGroupEntityList.size()) + 1;
         int isLearningCheckNumber = 0;

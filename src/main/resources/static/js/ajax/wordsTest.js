@@ -25,7 +25,7 @@ function successFunction(data){
     //TODO 현재 풀고 있는 문제의 보기를 몇개 틀렸을때 다음으로 넘어갈지 경정해야됨
     // nextExample();
 
-    nextExamQuestion();
+    // nextExamQuestion();
 }
 
 function failFunction(data){

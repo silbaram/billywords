@@ -47,7 +47,7 @@ public class BillyWordsLearningController {
             learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
 
             if(learningWordsEntity.getExampleEntityList().size() == 0) {
-                //학습을 위한 분제 보기를 만든다
+                //학습을 위한 문제의 보기를 만든다
                 List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId(), learningWordsEntity);
                 model.addAttribute("learningWordsExampleList", exampleEntityList);
             } else {

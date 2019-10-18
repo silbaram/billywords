@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Billy Words Test Login</title>
-    <link rel="stylesheet" href="/static/css/commmon.css">
+    <link rel="stylesheet" href="/css/commmon.css">
 </head>
 <body>
 
@@ -34,7 +34,7 @@
                     </select>
                 </div> -->
                 <div class="username">
-                    <label for="username"><img src="/static/images/svg/mail.svg" alt="" height="50"></label>
+                    <label for="username"><img src="/images/svg/mail.svg" alt="" height="50"></label>
                     <input type="email" name="email" id="username" placeholder="Email" required>
                     <input type="hidden" name="name" id="name" value="이름">
                 </div>
@@ -42,11 +42,11 @@
                     <input type="button" name="btn_idover" value="Check overlap ID" onclick="emailUniqueCheck()">
                 </div>
                 <div class="password">
-                    <label for="password"><img src="/static/images/svg/pass.svg" alt="" height="50"></label>
+                    <label for="password"><img src="/images/svg/pass.svg" alt="" height="50"></label>
                     <input type="password" name="password" id="password" placeholder="Password" required>
                 </div>
                 <div class="repassword">
-                    <label for="repassword"><img src="/static/images/svg/pass.svg" alt="" height="50"></label>
+                    <label for="repassword"><img src="/images/svg/pass.svg" alt="" height="50"></label>
                     <input type="password" name="" id="repassword" placeholder="Confirm Password" required>
                 </div>
                 <div class="submit">
@@ -58,11 +58,11 @@
 </body>
 
 <th:block layout:fragment="js">
-<script src="/static/js/countryCode.js"></script>
+<script src="/js/countryCode.js"></script>
 <script src="http://www.google.com/jsapi"></script>
 <script>
     google.load("jquery", "1");
 </script>
-<script src="/static/js/registration/registration.js"></script>
+<script src="/js/registration/registration.js"></script>
 </th:block>
 </html>

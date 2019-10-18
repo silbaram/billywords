@@ -88,12 +88,18 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
                 }
 
                 int check = random.nextInt(maxNumber);
-                for(int makeCheck : exampleNumber) {
-                    if(check == 0 || makeCheck == check || spellingEntityNumber == check) {
-                        check = -1;
-                        break;
+                if(spellingEntityNumber == check) {
+                    check = -1;
+                } else {
+
+                    for(int makeCheck : exampleNumber) {
+                        if(check == 0 || makeCheck == check) {
+                            check = -1;
+                            break;
+                        }
                     }
                 }
+
 
                 if(check > 0) {
                     exampleNumber[isExampleMakeNumber] = check;
@@ -138,7 +144,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
         LearningWordsEntity learningWordsEntity = getLearningWordsEntity(id, true);
 
-        if(wordsProblem.getChooseExampleId().equals(learningWordsEntity.getId().toString())) {
+        if(wordsProblem.getChooseExampleId().equals(String.valueOf(learningWordsEntity.getWordsGroupEntity().getId()))) {
             wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
             learningWordsEntity.setCorrectCount(learningWordsEntity.getCorrectCount() + 1);
         } else {
