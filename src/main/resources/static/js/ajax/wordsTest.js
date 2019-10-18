@@ -1,6 +1,8 @@
+var solvedProblemCount = 0;
+var solvedProblemChallengeCount = 4;
+
 function isWordQuestionCorrect(obj) {
 
-    console.log(obj.getAttribute("value"));
     var jsonData = {
         chooseExampleId : obj.getAttribute("value")
     };
@@ -11,7 +13,7 @@ function isWordQuestionCorrect(obj) {
         contentType: "application/json",
         data: JSON.stringify(jsonData),
         success: function(data){
-            successFunction(data);
+            successFunction(JSON.parse(data));
         },
         error: function(xhr, status, error) {
             failFunction(error);
@@ -20,12 +22,26 @@ function isWordQuestionCorrect(obj) {
 }
 
 function successFunction(data){
-    console.log("successFunction", data);
 
-    //TODO 현재 풀고 있는 문제의 보기를 몇개 틀렸을때 다음으로 넘어갈지 경정해야됨
-    // nextExample();
-
-    // nextExamQuestion();
+    // 한문제에서 풀수 있는 횟수보다 작고 정답이 아니면 문제 풀기 시도를 +1 하고 한번더 문제를 풀 기회룰 준다.
+    if(data.status !== "200" && solvedProblemCount < solvedProblemChallengeCount) {
+        solvedProblemCount++;
+    // 문제풀 기회를 넘었거나 정답이면
+    } else {
+        //정답이면
+        if(data.status === "200") {
+            if(data.nextExample === "true") {
+                // 새로운 학습문제 요청
+                nextExamQuestion();
+            } else {
+                // 다음 문제 요청
+                nextExample();
+            }
+        } else {
+            // 다음 문제 요청
+            nextExample();
+        }
+    }
 }
 
 function failFunction(data){
@@ -42,7 +58,7 @@ function nextExample() {
 }
 
 function nextExamQuestion() {
-    console.log("nextExample");
+    console.log("nextExamQuestion");
     var frm = document.nextExample;
 
     frm.action = "/words-test/next/exam-question";
