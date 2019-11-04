@@ -42,7 +42,8 @@ public class BillyWordsLearningController {
         //사용자 정보가 없다면 비회면 로직으로 보여준다.
         if(wordUser == null) {
             //TODO 비로그인 사용자를 위한 문제 풀기를 만들어야됨
-            learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(0, true);
+            learningWordsEntity = billyWordsLearningService.getGuestLearningWordsEntity();
+            System.out.println(learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().get(0).getWordSpelling());
         } else {
             learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
 

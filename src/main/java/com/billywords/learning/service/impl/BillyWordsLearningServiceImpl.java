@@ -32,6 +32,9 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     @Value("${word.example.create.max}")
     private int maxNumber;
 
+    @Value("${word.example.guest.id}")
+    private int guestId;
+
     @Autowired
     ExampleEntityRepository exampleEntityRepository;
 
@@ -57,6 +60,17 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     public LearningWordsEntity getLearningWordsEntity(Integer id, Boolean isLearning) {
         Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
         return usersEntityOptional.map(usersEntity -> learningWordsEntityRepository.findByUsersEntityAndIsLearning(usersEntity, isLearning)).orElse(null);
+    }
+
+
+    /**
+     * 비회원인 경우에 튜토리얼 문제를 가져온다.
+     * @return
+     */
+    @Override
+    public LearningWordsEntity getGuestLearningWordsEntity() {
+        Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(guestId);
+        return usersEntityOptional.map(usersEntity -> learningWordsEntityRepository.findByUsersEntityAndIsLearning(usersEntity, true)).orElse(null);
     }
 
 
@@ -99,7 +113,6 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
                         }
                     }
                 }
-
 
                 if(check > 0) {
                     exampleNumber[isExampleMakeNumber] = check;

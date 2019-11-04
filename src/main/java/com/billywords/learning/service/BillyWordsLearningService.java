@@ -12,6 +12,8 @@ public interface BillyWordsLearningService {
 
     public LearningWordsEntity getLearningWordsEntity(Integer userEmail, Boolean isLearning);
 
+    public LearningWordsEntity getGuestLearningWordsEntity();
+
     public boolean isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem);
 
     public LearningWordsEntity nextLearningWordsEntity(WordUser wordUser);
