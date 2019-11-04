@@ -147,6 +147,71 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     }
 
 
+    @Override
+    public List<ExampleEntity> createTemporaryWordExample(Integer id, LearningWordsEntity learningWordsEntity) {
+        final List<ExampleEntity> exampleEntityList = new ArrayList<>();
+
+        //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
+        Optional<WordSpellingEntity> spellingEntityOptional = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
+        int spellingEntityNumber = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getId() : 1;
+
+        //유저 정보를 찾는다
+        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
+        if(usersEntityOptional.isPresent()) {
+
+            int[] exampleNumber = new int[6];
+            int isExampleMakeNumber = 0;
+
+            // 보기 목록 뽑기
+            Random random = new Random();
+            while(true) {
+                if(isExampleMakeNumber == 5) {
+                    break;
+                }
+
+                int check = random.nextInt(maxNumber);
+                if(spellingEntityNumber == check) {
+                    check = -1;
+                } else {
+
+                    for(int makeCheck : exampleNumber) {
+                        if(check == 0 || makeCheck == check) {
+                            check = -1;
+                            break;
+                        }
+                    }
+                }
+
+                if(check > 0) {
+                    exampleNumber[isExampleMakeNumber] = check;
+                    isExampleMakeNumber++;
+                }
+            }
+
+            //정답 보기를 랜덤으로 자리 잡아 준다
+            int changeExample =  random.nextInt(5);
+            exampleNumber[5] = exampleNumber[changeExample];
+            exampleNumber[changeExample] = spellingEntityNumber;
+
+            //보기 저장
+            int orderNumber = 0;
+            for(int makeCheck : exampleNumber) {
+                //TODO 언어코드 부분을 저장하고 가져오는 부분이 만들어져야됨
+                WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findById(makeCheck), "KO");
+
+                ExampleEntity exampleEntity = new ExampleEntity();
+                exampleEntity.setLearningWordsEntity(learningWordsEntity);
+                exampleEntity.setOrderNumber(orderNumber);
+                exampleEntity.setWordSpellingEntity(wordSpellingEntity);
+                exampleEntityList.add(exampleEntity);
+                orderNumber++;
+
+            }
+        }
+
+        return exampleEntityList;
+    }
+
     /**
      * 현재 학습중인 단어를 가져와서 보기에서 센택한 값과 배교
      * @param id

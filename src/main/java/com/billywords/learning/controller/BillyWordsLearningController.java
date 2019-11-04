@@ -8,6 +8,7 @@ import com.billywords.words.models.ExampleEntity;
 import com.billywords.words.models.LearningWordsEntity;
 import com.billywords.words.models.WordSpellingEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,8 @@ public class BillyWordsLearningController {
     @Autowired
     BillyWordsLearningServiceImpl billyWordsLearningService;
 
+    @Value("${word.example.guest.id}")
+    private int guestId;
 
 
     /**
@@ -43,7 +46,10 @@ public class BillyWordsLearningController {
         if(wordUser == null) {
             //TODO 비로그인 사용자를 위한 문제 풀기를 만들어야됨
             learningWordsEntity = billyWordsLearningService.getGuestLearningWordsEntity();
-            System.out.println(learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().get(0).getWordSpelling());
+
+            //튜토리얼 학습을 위한 문제의 임시보기를 만든다
+            List<ExampleEntity> exampleEntityList = billyWordsLearningService.createTemporaryWordExample(guestId, learningWordsEntity);
+            model.addAttribute("learningWordsExampleList", exampleEntityList);
         } else {
             learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
 
