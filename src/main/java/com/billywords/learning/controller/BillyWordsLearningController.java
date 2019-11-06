@@ -39,6 +39,7 @@ public class BillyWordsLearningController {
     @RequestMapping(method = RequestMethod.GET)
     public String login(Model model, @AuthenticationPrincipal WordUser wordUser){
 
+        String page = "page/words-test";
         //학습중인 단어
         LearningWordsEntity learningWordsEntity = null;
 
@@ -48,8 +49,9 @@ public class BillyWordsLearningController {
             learningWordsEntity = billyWordsLearningService.getGuestLearningWordsEntity();
 
             //튜토리얼 학습을 위한 문제의 임시보기를 만든다
-            List<ExampleEntity> exampleEntityList = billyWordsLearningService.createTemporaryWordExample(guestId, learningWordsEntity);
+            List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(guestId, learningWordsEntity);
             model.addAttribute("learningWordsExampleList", exampleEntityList);
+            page = "page/guest-words-test.html";
         } else {
             learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
 
@@ -69,7 +71,7 @@ public class BillyWordsLearningController {
         model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
         model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
 
-        return "page/words-test";
+        return page;
     }
 
 
@@ -85,8 +87,14 @@ public class BillyWordsLearningController {
     @RequestMapping(value = "/exam-question", method = RequestMethod.PATCH)
     public ResponseEntity<?> wordsExamQuestion(@RequestBody WordsProblemVO wordsProblem, Model model, @AuthenticationPrincipal WordUser wordUser) {
 
-        boolean isNextExample = billyWordsLearningService.isWordQuestionCorrect(wordUser.getUserId(), wordsProblem);
-        wordsProblem.setNextExample(isNextExample);
+        //게스트 일 경우 문제 풀기
+        if(wordUser == null) {
+            boolean isNextExample = billyWordsLearningService.isGuestWordQuestionCorrect(guestId, wordsProblem);
+            wordsProblem.setNextExample(isNextExample);
+        } else {
+            boolean isNextExample = billyWordsLearningService.isWordQuestionCorrect(wordUser.getUserId(), wordsProblem);
+            wordsProblem.setNextExample(isNextExample);
+        }
 
         return ResponseEntity.ok(wordsProblem);
     }

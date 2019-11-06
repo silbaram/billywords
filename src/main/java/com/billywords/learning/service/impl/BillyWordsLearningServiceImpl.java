@@ -147,8 +147,14 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     }
 
 
+    /**
+     * 사용자 학습 문제의 보기를 만들어 준다. (비회원용 튜토리얼)
+     * @param id
+     * @param learningWordsEntity
+     * @return
+     */
     @Override
-    public List<ExampleEntity> createTemporaryWordExample(Integer id, LearningWordsEntity learningWordsEntity) {
+    public List<ExampleEntity> createGuestWordExample(Integer id, LearningWordsEntity learningWordsEntity) {
         final List<ExampleEntity> exampleEntityList = new ArrayList<>();
 
         //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
@@ -212,6 +218,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         return exampleEntityList;
     }
 
+
     /**
      * 현재 학습중인 단어를 가져와서 보기에서 센택한 값과 배교
      * @param id
@@ -224,15 +231,33 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
         if(wordsProblem.getChooseExampleId().equals(String.valueOf(learningWordsEntity.getWordsGroupEntity().getId()))) {
             wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
-            learningWordsEntity.setCorrectCount(learningWordsEntity.getCorrectCount() + 1);
+            learningWordsEntity.setCorrectCount(learningWordsEntity.getCorrectCount() == null ? 0 : learningWordsEntity.getCorrectCount() + 1);
         } else {
             wordsProblem.setStatus(CommonCode.WORD_PROBLEM.FAIL);
-            learningWordsEntity.setWrongCount(learningWordsEntity.getWrongCount() + 1);
+            learningWordsEntity.setWrongCount(learningWordsEntity.getWrongCount() == null ? 0 : learningWordsEntity.getWrongCount() + 1);
         }
 
         LearningWordsEntity reloadLearningWordsEntity = learningWordsEntityRepository.save(learningWordsEntity);
 
         return reloadLearningWordsEntity.getCorrectCount() > reloadLearningWordsEntity.getWrongCount();
+    }
+
+
+    /**
+     * 현재 학습중인 단어를 가져와서 보기에서 센택한 값과 배교 (비회원용 튜토리얼)
+     * @param id
+     * @param wordsProblem
+     */
+    @Override
+    public boolean isGuestWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem) {
+
+//        if(wordsProblem.getChooseExampleId().equals(String.valueOf(learningWordsEntity.getWordsGroupEntity().getId()))) {
+//            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
+//        } else {
+//            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.FAIL);
+//        }
+        wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
+        return wordsProblem.getStatus().equals(CommonCode.WORD_PROBLEM.SUCCESS);
     }
 
 
