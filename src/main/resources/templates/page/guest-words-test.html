@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layouts/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Billy Words Test</title>
+    <link rel="stylesheet" href="/css/commmon.css">
+</head>
+<body>
+<header>
+    <h1>Billy Words Test</h1>
+</header>
+<div class="url" id="url-billyWordsTest"></div>
+
+<div id="wrapper" layout:fragment="content">
+    <section class="section_top">
+        <div class="select_menu">
+            <button onclick="menuDrop()" class="dropbtn">W</button>
+            <div id="menu" class="menu_dropdown">
+                <a onclick="changeWordPart(this.text)" href="#">Words</a>
+                <a onclick="changeWordPart(this.text)" href="#">Noun</a>
+                <a onclick="changeWordPart(this.text)" href="#">Verb</a>
+                <a onclick="changeWordPart(this.text)" href="#">Adjective</a>
+                <a onclick="changeWordPart(this.text)" href="#">Adverb</a>
+            </div>
+        </div>
+        <div class="exchange">
+            <div class="box" onclick="langExchange()">
+                <p class="lang_left">Kr</p>
+                <img src="../images/svg/exchange.svg" alt="" >
+                <p class="lang_right">En</p>
+            </div>
+        </div>
+        <div class="personal">
+            <a href="../html/billyAbility.html"><img src="/images/svg/id02.svg" alt=""></a>
+        </div>
+    </section>
+    <section>
+        <div class="words_contain">
+            <div class="words_part">
+                <p th:text="${part}">Adjective</p>
+            </div>
+            <div class="words_word">
+                <h2 th:text="${learningWord}">learningWord</h2>
+            </div>
+        </div>
+        <div class="anser_contain">
+            <div class="anser" th:each="example, i : ${learningWordsExampleList}">
+                <p th:text="${example.getWordSpellingEntity().getWordSpelling()}" th:value="${example.getWordSpellingEntity().getWordsGroupEntity().getId()}" onclick="isWordQuestionCorrect(this)"></p>
+            </div>
+        </div>
+        <div class="hint_contain">
+            <p>hint</p>
+        </div>
+
+    </section>
+
+    <script src="/js/menuDrop.js"></script>
+    <script src="/js/changeLang.js"></script>
+    <script src="/js/changeWordPart.js"></script>
+    <script src="/js/ajax/wordsTest.js"></script>
+
+    <form name="nextExample" id="nextExample"></form>
+</div>
+
+<footer>
+    <p>by SJS 2019</p>
+</footer>
+</body>
+</html>
