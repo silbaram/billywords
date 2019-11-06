@@ -251,12 +251,12 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     @Override
     public boolean isGuestWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem) {
 
-//        if(wordsProblem.getChooseExampleId().equals(String.valueOf(learningWordsEntity.getWordsGroupEntity().getId()))) {
-//            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
-//        } else {
-//            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.FAIL);
-//        }
-        wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
+        if(wordsProblem.getChooseExampleId().equals(wordsProblem.getLearningWordsGroupEntityId())) {
+            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
+        } else {
+            wordsProblem.setStatus(CommonCode.WORD_PROBLEM.FAIL);
+        }
+
         return wordsProblem.getStatus().equals(CommonCode.WORD_PROBLEM.SUCCESS);
     }
 

@@ -4,7 +4,8 @@ var solvedProblemChallengeCount = 4;
 function isWordQuestionCorrect(obj) {
 
     var jsonData = {
-        chooseExampleId : obj.getAttribute("value")
+        chooseExampleId : obj.getAttribute("value"),
+        learningWordsGroupEntityId : $("#learningWordsGroupEntityId").val()
     };
 
     $.ajax({

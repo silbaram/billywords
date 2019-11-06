@@ -64,7 +64,9 @@
     <script src="/js/changeWordPart.js"></script>
     <script src="/js/ajax/guestWordsTest.js"></script>
 
-    <form name="nextExample" id="nextExample"></form>
+    <form name="nextExample" id="nextExample">
+        <input type="hidden" id="learningWordsGroupEntityId" th:value="${learningWordsGroupEntityId}">
+    </form>
 </div>
 
 <footer>

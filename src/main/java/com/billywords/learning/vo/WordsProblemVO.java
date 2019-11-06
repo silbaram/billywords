@@ -4,6 +4,7 @@ public class WordsProblemVO {
     String chooseExampleId;
     String status;
     boolean isNextExample;
+    String learningWordsGroupEntityId;
 
     public String getChooseExampleId() {
         return chooseExampleId;
@@ -27,5 +28,13 @@ public class WordsProblemVO {
 
     public void setNextExample(boolean isNextExample) {
         isNextExample = isNextExample;
+    }
+
+    public String getLearningWordsGroupEntityId() {
+        return learningWordsGroupEntityId;
+    }
+
+    public void setLearningWordsGroupEntityId(String learningWordsGroupEntityId) {
+        this.learningWordsGroupEntityId = learningWordsGroupEntityId;
     }
 }

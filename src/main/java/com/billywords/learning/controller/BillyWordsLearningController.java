@@ -45,12 +45,12 @@ public class BillyWordsLearningController {
 
         //사용자 정보가 없다면 비회면 로직으로 보여준다.
         if(wordUser == null) {
-            //TODO 비로그인 사용자를 위한 문제 풀기를 만들어야됨
             learningWordsEntity = billyWordsLearningService.getGuestLearningWordsEntity();
 
             //튜토리얼 학습을 위한 문제의 임시보기를 만든다
             List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(guestId, learningWordsEntity);
             model.addAttribute("learningWordsExampleList", exampleEntityList);
+            model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
             page = "page/guest-words-test.html";
         } else {
             learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
