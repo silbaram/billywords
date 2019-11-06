@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface WordSpellingEntityRepository extends JpaRepository<WordSpellingEntity, Integer> {
-    public WordSpellingEntity findByWordsGroupEntityAndLanguageCode(Optional<WordsGroupEntity> wordsGroupEntity, String languageCode);
+    public WordSpellingEntity findByWordsGroupEntityAndLanguageCode(WordsGroupEntity wordsGroupEntity, String languageCode);
 }
