@@ -41,18 +41,21 @@ public class BillyWordsLearningController {
 
         String page = "page/words-test";
         //학습중인 단어
-        LearningWordsEntity learningWordsEntity = null;
+        LearningWordsEntity learningWordsEntity;
 
         //사용자 정보가 없다면 비회면 로직으로 보여준다.
         if(wordUser == null) {
-            learningWordsEntity = billyWordsLearningService.getGuestLearningWordsEntity();
+            List<LearningWordsEntity> learningWordsEntityList= billyWordsLearningService.getGuestLearningWordsEntityList();
+            learningWordsEntity = learningWordsEntityList.get(0);
 
             //튜토리얼 학습을 위한 문제의 임시보기를 만든다
-            List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(guestId, learningWordsEntity);
+            List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity);
             model.addAttribute("learningWordsExampleList", exampleEntityList);
+            model.addAttribute("learningWordsPosition", 1);
             model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
-            page = "page/guest-words-test.html";
+            page = "page/guest-words-test";
         } else {
+            //학습중인 단어
             learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
 
             if(learningWordsEntity.getExampleEntityList().size() == 0) {
@@ -89,7 +92,7 @@ public class BillyWordsLearningController {
 
         //게스트 일 경우 문제 풀기
         if(wordUser == null) {
-            boolean isNextExample = billyWordsLearningService.isGuestWordQuestionCorrect(guestId, wordsProblem);
+            boolean isNextExample = billyWordsLearningService.isGuestWordQuestionCorrect(wordsProblem);
             wordsProblem.setNextExample(isNextExample);
         } else {
             boolean isNextExample = billyWordsLearningService.isWordQuestionCorrect(wordUser.getUserId(), wordsProblem);
@@ -117,7 +120,43 @@ public class BillyWordsLearningController {
     }
 
 
-    //학습중인 문제를 완전히 익혔을때 그 문제르 빼고 다음 문제 가져오기
+
+    /**
+     * 다음 문제 만들기 요청 (비회원용 튜토리얼)
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/next/guest-example", method = RequestMethod.POST)
+    public String guestWordsNextExample(@RequestParam String learningWordsPosition,  Model model) {
+
+        List<LearningWordsEntity> learningWordsEntityList = billyWordsLearningService.getGuestLearningWordsEntityList();
+        LearningWordsEntity learningWordsEntity = learningWordsEntityList.get(Integer.valueOf(learningWordsPosition.trim()));
+
+        //튜토리얼 학습을 위한 문제의 임시보기를 만든다
+        List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity);
+        model.addAttribute("learningWordsExampleList", exampleEntityList);
+        model.addAttribute("learningWordsEntityList", learningWordsEntityList.toArray());
+        model.addAttribute("learningWordsPosition", Integer.valueOf(learningWordsPosition.trim()) + 1);
+        model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
+
+        List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
+        //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
+        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
+
+        model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
+        model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
+
+        return "page/guest-words-test";
+    }
+
+
+
+    /**
+     * 학습중인 문제를 완전히 익혔을때 그 문제르 빼고 다음 문제 가져오기
+     * @param model
+     * @param wordUser
+     * @return
+     */
     @RequestMapping(value = "/next/exam-question", method = RequestMethod.POST)
     public String createNextWordsExamQuestion(Model model, @AuthenticationPrincipal WordUser wordUser) {
 

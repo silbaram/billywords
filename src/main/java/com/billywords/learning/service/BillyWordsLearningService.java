@@ -9,15 +9,13 @@ import java.util.List;
 
 public interface BillyWordsLearningService {
     public List<ExampleEntity> createWordExample(Integer id, LearningWordsEntity learningWordsEntity);
-    public List<ExampleEntity> createGuestWordExample(Integer id, LearningWordsEntity learningWordsEntity);
+    public List<ExampleEntity> createGuestWordExample(LearningWordsEntity learningWordsEntity);
 
     public LearningWordsEntity getLearningWordsEntity(Integer userEmail, Boolean isLearning);
-
-    public LearningWordsEntity getGuestLearningWordsEntity();
+    public List<LearningWordsEntity> getGuestLearningWordsEntityList();
 
     public boolean isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem);
-
-    public boolean isGuestWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem);
+    public boolean isGuestWordQuestionCorrect(WordsProblemVO wordsProblem);
 
     public LearningWordsEntity nextLearningWordsEntity(WordUser wordUser);
 

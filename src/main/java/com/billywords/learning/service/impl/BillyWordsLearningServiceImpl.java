@@ -68,9 +68,9 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
      * @return
      */
     @Override
-    public LearningWordsEntity getGuestLearningWordsEntity() {
+    public List<LearningWordsEntity> getGuestLearningWordsEntityList() {
         Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(guestId);
-        return usersEntityOptional.map(usersEntity -> learningWordsEntityRepository.findByUsersEntityAndIsLearning(usersEntity, true)).orElse(null);
+        return usersEntityOptional.map(usersEntity -> learningWordsEntityRepository.findByUsersEntity(usersEntity)).orElse(null);
     }
 
 
@@ -149,12 +149,11 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
     /**
      * 사용자 학습 문제의 보기를 만들어 준다. (비회원용 튜토리얼)
-     * @param id
      * @param learningWordsEntity
      * @return
      */
     @Override
-    public List<ExampleEntity> createGuestWordExample(Integer id, LearningWordsEntity learningWordsEntity) {
+    public List<ExampleEntity> createGuestWordExample(LearningWordsEntity learningWordsEntity) {
         final List<ExampleEntity> exampleEntityList = new ArrayList<>();
 
         //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
@@ -162,7 +161,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         int spellingEntityNumber = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getWordsGroupEntity().getImportance() : 1;
 
         //유저 정보를 찾는다
-        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
+        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(guestId);
         if(usersEntityOptional.isPresent()) {
 
             int[] exampleNumber = new int[6];
@@ -245,11 +244,10 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
     /**
      * 현재 학습중인 단어를 가져와서 보기에서 센택한 값과 배교 (비회원용 튜토리얼)
-     * @param id
      * @param wordsProblem
      */
     @Override
-    public boolean isGuestWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem) {
+    public boolean isGuestWordQuestionCorrect(WordsProblemVO wordsProblem) {
 
         if(wordsProblem.getChooseExampleId().equals(wordsProblem.getLearningWordsGroupEntityId())) {
             wordsProblem.setStatus(CommonCode.WORD_PROBLEM.SUCCESS);
@@ -303,7 +301,11 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     }
 
 
-    // 현재 학습한 단어를 완료하고 다음 문제랑 교체
+    /**
+     * 현재 학습한 단어를 완료하고 다음 문제랑 교체
+     * @param wordUser
+     */
+
     public void createNextLearningWordsEntity(WordUser wordUser) {
 
         // 학습중인 단어

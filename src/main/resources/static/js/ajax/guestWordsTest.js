@@ -13,7 +13,8 @@ function isWordQuestionCorrect(obj) {
         url: "/words-test/exam-question",
         contentType: "application/json",
         data: JSON.stringify(jsonData),
-        success: function(data){
+        success: function(data) {
+            console.log(data);
             successFunction(JSON.parse(data));
         },
         error: function(xhr, status, error) {
@@ -29,19 +30,21 @@ function successFunction(data){
         solvedProblemCount++;
     // 문제풀 기회를 넘었거나 정답이면
     } else {
-        //정답이면
-        if(data.status === "200") {
-            if(data.nextExample === "true") {
-                // 새로운 학습문제 요청
-                nextExamQuestion();
-            } else {
-                // 다음 문제 요청
-                nextExample();
-            }
-        } else {
-            // 다음 문제 요청
-            nextExample();
-        }
+        // 다음 문제 요청
+        nextExample();
+        // //정답이면
+        // if(data.status === "200") {
+        //     if(data.nextExample === "true") {
+        //         // 새로운 학습문제 요청
+        //         nextExamQuestion();
+        //     } else {
+        //         // 다음 문제 요청
+        //         nextExample();
+        //     }
+        // } else {
+        //     // 다음 문제 요청
+        //     nextExample();
+        // }
     }
 }
 
@@ -52,8 +55,8 @@ function failFunction(data){
 function nextExample() {
     console.log("nextExample");
     var frm = document.nextExample;
-
-    frm.action = "/words-test/next/example";
+alert("nextExample");
+    frm.action = "/words-test/next/guest-example";
     frm.method = "post";
     frm.submit();
 }
