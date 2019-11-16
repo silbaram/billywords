@@ -4,7 +4,7 @@ public class UserVO {
 
     private String email;
     private String password;
-    private String language;
+    private String fromLanguage;
     private String name;
 
     public String getEmail() {
@@ -23,12 +23,12 @@ public class UserVO {
         this.password = password;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getFromLanguage() {
+        return fromLanguage;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setFromLanguage(String fromLanguage) {
+        this.fromLanguage = fromLanguage;
     }
 
     public String getName() {

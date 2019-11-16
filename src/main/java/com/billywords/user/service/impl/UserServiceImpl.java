@@ -58,7 +58,8 @@ public class UserServiceImpl implements UserService {
         usersEntity.setEmail(user.getEmail());
         usersEntity.setName(user.getName());
         usersEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        usersEntity.setLanguage("KO"); //TODO 화면에서 받는 값으로 변경해야됨
+        usersEntity.setFromLanguage(user.getFromLanguage().toUpperCase());
+        usersEntity.setToLanguage("EN"); //학습 언어는 기본으로 EN
         usersEntity.setCreateDate(ts);
         usersEntityRepository.save(usersEntity);
 

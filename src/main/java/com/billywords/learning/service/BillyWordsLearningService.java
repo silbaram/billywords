@@ -8,7 +8,7 @@ import com.billywords.words.models.LearningWordsEntity;
 import java.util.List;
 
 public interface BillyWordsLearningService {
-    public List<ExampleEntity> createWordExample(Integer id, LearningWordsEntity learningWordsEntity);
+    public List<ExampleEntity> createWordExample(Integer id, String fromLanguage, String toLanguage, LearningWordsEntity learningWordsEntity);
     public List<ExampleEntity> createGuestWordExample(LearningWordsEntity learningWordsEntity);
 
     public LearningWordsEntity getLearningWordsEntity(Integer userEmail, Boolean isLearning);

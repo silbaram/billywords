@@ -13,7 +13,7 @@ function isWordQuestionCorrect(obj) {
         contentType: "application/json",
         data: JSON.stringify(jsonData),
         success: function(data){
-            successFunction(JSON.parse(data));
+            successFunction(JSON.parse(data), obj);
         },
         error: function(xhr, status, error) {
             failFunction(error);
@@ -21,11 +21,12 @@ function isWordQuestionCorrect(obj) {
     });
 }
 
-function successFunction(data){
+function successFunction(data, obj){
 
     // 한문제에서 풀수 있는 횟수보다 작고 정답이 아니면 문제 풀기 시도를 +1 하고 한번더 문제를 풀 기회룰 준다.
     if(data.status !== "200" && solvedProblemCount < solvedProblemChallengeCount) {
         solvedProblemCount++;
+        anserWorngChange(obj.className);
     // 문제풀 기회를 넘었거나 정답이면
     } else {
         //정답이면

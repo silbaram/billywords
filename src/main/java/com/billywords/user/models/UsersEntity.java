@@ -15,7 +15,8 @@ public class UsersEntity {
     private Integer id;
     private String email;
     private String password;
-    private String language;
+    private String fromLanguage;
+    private String toLanguage;
     private String name;
     private Timestamp createDate;
     private Timestamp updateDate;
@@ -58,13 +59,23 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "language")
-    public String getLanguage() {
-        return language;
+    @Column(name = "from_language")
+    public String getFromLanguage() {
+        return fromLanguage;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setFromLanguage(String fromLanguage) {
+        this.fromLanguage = fromLanguage;
+    }
+
+    @Basic
+    @Column(name = "to_language")
+    public String getToLanguage() {
+        return toLanguage;
+    }
+
+    public void setToLanguage(String toLanguage) {
+        this.toLanguage = toLanguage;
     }
 
     @Basic
@@ -163,7 +174,8 @@ public class UsersEntity {
         return id == that.id &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(password, that.password) &&
-                Objects.equals(language, that.language) &&
+                Objects.equals(fromLanguage, that.fromLanguage) &&
+                Objects.equals(toLanguage, that.toLanguage) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(createDate, that.createDate) &&
                 Objects.equals(updateDate, that.updateDate) &&
@@ -175,6 +187,6 @@ public class UsersEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, language, name, createDate, updateDate, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+        return Objects.hash(id, email, password, fromLanguage, toLanguage, name, createDate, updateDate, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
     }
 }

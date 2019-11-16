@@ -33,6 +33,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         return new WordUser(user.getId(),
+                user.getFromLanguage(),
+                user.getToLanguage(),
                 user.getEmail(),
                 user.getPassword(),
                 grantedAuthorities);

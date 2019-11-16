@@ -50,7 +50,7 @@
         </div>
         <div class="anser_contain">
             <div class="anser" th:each="example, i : ${learningWordsExampleList}">
-                <p th:text="${example.getWordSpellingEntity().getWordSpelling()}" th:value="${example.getWordSpellingEntity().getWordsGroupEntity().getId()}" onclick="isWordQuestionCorrect(this)"></p>
+                <p th:class="|anser0${i.count}|" th:text="${example.getWordSpellingEntity().getWordSpelling()}" th:value="${example.getWordSpellingEntity().getWordsGroupEntity().getId()}" onclick="isWordQuestionCorrect(this)"></p>
             </div>
         </div>
         <div class="hint_contain">
@@ -62,6 +62,7 @@
     <script src="/js/menuDrop.js"></script>
     <script src="/js/changeLang.js"></script>
     <script src="/js/changeWordPart.js"></script>
+    <script src="/js/anserWorng.js"></script>
     <script src="/js/ajax/wordsTest.js"></script>
 
     <form name="nextExample" id="nextExample"></form>

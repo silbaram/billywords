@@ -80,11 +80,10 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
      * @param learningWordsEntity
      */
     @Override
-    public List<ExampleEntity> createWordExample(Integer id, LearningWordsEntity learningWordsEntity) {
+    public List<ExampleEntity> createWordExample(Integer id, String fromLanguage, String toLanguage, LearningWordsEntity learningWordsEntity) {
         final List<ExampleEntity> exampleEntityList = new ArrayList<>();
 
-        //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
-        Optional<WordSpellingEntity> spellingEntityOptional = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
+        Optional<WordSpellingEntity> spellingEntityOptional = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().stream().filter(x -> x.getLanguageCode().equals(toLanguage)).findFirst();
         int spellingEntityNumber = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getId() : 1;
 
         //유저 정보를 찾는다
@@ -128,8 +127,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             //보기 저장
             int orderNumber = 0;
             for(int makeCheck : exampleNumber) {
-                //TODO 언어코드 부분을 저장하고 가져오는 부분이 만들어져야됨
-                WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findByImportance(makeCheck), "KO");
+                WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findByImportance(makeCheck), fromLanguage);
 
                 ExampleEntity exampleEntity = new ExampleEntity();
                 exampleEntity.setLearningWordsEntity(learningWordsEntity);
@@ -202,7 +200,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             int orderNumber = 0;
             for(int makeCheck : exampleNumber) {
                 //TODO 언어코드 부분을 저장하고 가져오는 부분이 만들어져야됨
-                WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findByImportance(makeCheck), "AR");
+                WordSpellingEntity wordSpellingEntity = wordSpellingEntityRepository.findByWordsGroupEntityAndLanguageCode(wordsGroupEntityRepository.findByImportance(makeCheck), "EN");
 
                 ExampleEntity exampleEntity = new ExampleEntity();
                 exampleEntity.setLearningWordsEntity(learningWordsEntity);

@@ -60,7 +60,7 @@ public class BillyWordsLearningController {
 
             if(learningWordsEntity.getExampleEntityList().size() == 0) {
                 //학습을 위한 문제의 보기를 만든다
-                List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId(), learningWordsEntity);
+                List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId(), wordUser.getFromLanguage(), wordUser.getToLanguage(), learningWordsEntity);
                 model.addAttribute("learningWordsExampleList", exampleEntityList);
             } else {
                 model.addAttribute("learningWordsExampleList", learningWordsEntity.getExampleEntityList());
@@ -68,8 +68,7 @@ public class BillyWordsLearningController {
         }
 
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
-        //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
-        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
+        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(wordUser.getToLanguage())).findFirst();
 
         model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
         model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
@@ -127,7 +126,7 @@ public class BillyWordsLearningController {
      * @return
      */
     @RequestMapping(value = "/next/guest-example", method = RequestMethod.POST)
-    public String guestWordsNextExample(@RequestParam String learningWordsPosition,  Model model) {
+    public String guestWordsNextExample(@RequestParam String learningWordsPosition, Model model) {
 
         List<LearningWordsEntity> learningWordsEntityList = billyWordsLearningService.getGuestLearningWordsEntityList();
         LearningWordsEntity learningWordsEntity = learningWordsEntityList.get(Integer.valueOf(learningWordsPosition.trim()));
@@ -140,7 +139,7 @@ public class BillyWordsLearningController {
         model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
 
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
-        //TODO 학습을 하기 위한 언어를 선택 하고 가져와서 문제를 어떤 언어로 출제 할지 선택 하는 부분이 필요
+        //튜토리얼은 무조건 EN으로 세팅
         Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
 
         model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
