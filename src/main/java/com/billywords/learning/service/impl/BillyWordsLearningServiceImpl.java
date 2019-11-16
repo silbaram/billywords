@@ -84,7 +84,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         final List<ExampleEntity> exampleEntityList = new ArrayList<>();
 
         Optional<WordSpellingEntity> spellingEntityOptional = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList().stream().filter(x -> x.getLanguageCode().equals(toLanguage)).findFirst();
-        int spellingEntityNumber = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getId() : 1;
+        int spellingEntityNumber = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getWordsGroupEntity().getImportance() : 1;
 
         //유저 정보를 찾는다
         final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);

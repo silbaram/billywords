@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private LearningWordsEntityRepository learningWordsEntityRepository;
 
-    @Value("${word.example.create.max}")
+    @Value("${word.learning.create.max}")
     private int maxNumber;
 
 

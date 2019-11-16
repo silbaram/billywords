@@ -31,7 +31,7 @@ function successFunction(data, obj){
     } else {
         //정답이면
         if(data.status === "200") {
-            if(data.nextExample === "true") {
+            if(data.nextExample == true) {
                 // 새로운 학습문제 요청
                 nextExamQuestion();
             } else {

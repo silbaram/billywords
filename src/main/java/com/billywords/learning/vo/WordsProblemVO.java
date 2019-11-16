@@ -23,11 +23,11 @@ public class WordsProblemVO {
     }
 
     public boolean isNextExample() {
-        return isNextExample;
+        return this.isNextExample;
     }
 
     public void setNextExample(boolean isNextExample) {
-        isNextExample = isNextExample;
+        this.isNextExample = isNextExample;
     }
 
     public String getLearningWordsGroupEntityId() {
