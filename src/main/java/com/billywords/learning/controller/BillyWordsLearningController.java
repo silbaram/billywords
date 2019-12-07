@@ -36,6 +36,9 @@ public class BillyWordsLearningController {
     @RequestMapping(method = RequestMethod.GET)
     public String wordsTest(Model model, @AuthenticationPrincipal WordUser wordUser){
 
+        if(wordUser == null) {
+            return "redirect:/login";
+        }
         //학습중인 단어
         LearningWordsEntity learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
 
@@ -150,6 +153,7 @@ public class BillyWordsLearningController {
         model.addAttribute("learningWordsEntityList", learningWordsEntityList.toArray());
         model.addAttribute("learningWordsPosition", Integer.valueOf(learningWordsPosition.trim()) + 1);
         model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
+        model.addAttribute("learningWordsEntityTotalCount", learningWordsEntityList.size());
 
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
         //튜토리얼은 문제는 처음에 선택한 언어로

@@ -7,13 +7,12 @@ function isWordQuestionCorrect(obj) {
         chooseExampleId : obj.getAttribute("value"),
         learningWordsGroupEntityId : $("#learningWordsGroupEntityId").val()
     };
-    console.log("Number($(\"#learningWordsPosition\").val()) === 1", Number($("#learningWordsPosition").val()) === 1);
-    console.log("umber($(\"#learningWordsPosition\").val())", Number($("#learningWordsPosition").val()));
-    if(Number($("#learningWordsPosition").val()) === 1) {
+
+    if(Number($("#learningWordsPosition").val()) === Number($("#learningWordsEntityTotalCount").val())) {
         pleaseSignupUp();
         return;
     }
-    return;
+
     $.ajax({
         type: "PATCH",
         url: "/words-test/exam-question",
