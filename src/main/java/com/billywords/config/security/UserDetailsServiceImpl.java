@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -25,18 +26,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        UsersEntity user = usersEntityRepository.findByEmail(s);
+        Optional<UsersEntity> user = usersEntityRepository.findByEmail(s);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-        for (AuthorityEntity role : user.getAuthorityEntityList()) {
+        for (AuthorityEntity role : user.get().getAuthorityEntityList()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthorityName()));
         }
 
-        return new WordUser(user.getId(),
-                user.getFromLanguage(),
-                user.getToLanguage(),
-                user.getEmail(),
-                user.getPassword(),
+        return new WordUser(user.get().getId(),
+                user.get().getFromLanguage(),
+                user.get().getToLanguage(),
+                user.get().getEmail(),
+                user.get().getPassword(),
                 grantedAuthorities);
     }
 }

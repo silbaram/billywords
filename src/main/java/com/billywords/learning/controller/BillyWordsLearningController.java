@@ -26,9 +26,6 @@ public class BillyWordsLearningController {
     @Autowired
     BillyWordsLearningServiceImpl billyWordsLearningService;
 
-    @Value("${word.example.guest.id}")
-    private int guestId;
-
 
     /**
      * 단어 테스트 페이지
@@ -37,34 +34,17 @@ public class BillyWordsLearningController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String login(Model model, @AuthenticationPrincipal WordUser wordUser){
+    public String wordsTest(Model model, @AuthenticationPrincipal WordUser wordUser){
 
-        String page = "page/words-test";
         //학습중인 단어
-        LearningWordsEntity learningWordsEntity;
+        LearningWordsEntity learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
 
-        //사용자 정보가 없다면 비회면 로직으로 보여준다.
-        if(wordUser == null) {
-            List<LearningWordsEntity> learningWordsEntityList= billyWordsLearningService.getGuestLearningWordsEntityList();
-            learningWordsEntity = learningWordsEntityList.get(0);
-
-            //튜토리얼 학습을 위한 문제의 임시보기를 만든다
-            List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity);
+        if(learningWordsEntity.getExampleEntityList().size() == 0) {
+            //학습을 위한 문제의 보기를 만든다
+            List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId(), wordUser.getFromLanguage(), wordUser.getToLanguage(), learningWordsEntity);
             model.addAttribute("learningWordsExampleList", exampleEntityList);
-            model.addAttribute("learningWordsPosition", 1);
-            model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
-            page = "page/guest-words-test";
         } else {
-            //학습중인 단어
-            learningWordsEntity = billyWordsLearningService.getLearningWordsEntity(wordUser.getUserId(), true);
-
-            if(learningWordsEntity.getExampleEntityList().size() == 0) {
-                //학습을 위한 문제의 보기를 만든다
-                List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId(), wordUser.getFromLanguage(), wordUser.getToLanguage(), learningWordsEntity);
-                model.addAttribute("learningWordsExampleList", exampleEntityList);
-            } else {
-                model.addAttribute("learningWordsExampleList", learningWordsEntity.getExampleEntityList());
-            }
+            model.addAttribute("learningWordsExampleList", learningWordsEntity.getExampleEntityList());
         }
 
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
@@ -73,7 +53,40 @@ public class BillyWordsLearningController {
         model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
         model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
 
-        return page;
+        return "page/words-test";
+    }
+
+
+
+    /**
+     * 단어 테스트 페이지
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/guest", method = RequestMethod.GET)
+    public String guestWordsTest(@RequestParam String prefecture, Model model){
+
+        //사용자 정보가 없다면 비회면 로직으로 보여준다.
+        List<LearningWordsEntity> learningWordsEntityList= billyWordsLearningService.getGuestLearningWordsEntityList();
+
+        //학습중인 단어
+        LearningWordsEntity learningWordsEntity = learningWordsEntityList.get(0);
+
+        //튜토리얼 학습을 위한 문제의 임시보기를 만든다
+        List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity);
+        model.addAttribute("learningWordsExampleList", exampleEntityList);
+        model.addAttribute("learningWordsPosition", 1);
+        model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
+
+        //튜토리얼은 문제는 처음에 선택한 언어로
+        List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
+        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(prefecture.toUpperCase())).findFirst();
+
+        model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
+        model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
+        model.addAttribute("prefecture", prefecture);
+
+        return "page/guest-words-test";
     }
 
 
@@ -126,9 +139,9 @@ public class BillyWordsLearningController {
      * @return
      */
     @RequestMapping(value = "/next/guest-example", method = RequestMethod.POST)
-    public String guestWordsNextExample(@RequestParam String learningWordsPosition, Model model) {
-
+    public String guestWordsNextExample(@RequestParam String prefecture, @RequestParam String learningWordsPosition, Model model) {
         List<LearningWordsEntity> learningWordsEntityList = billyWordsLearningService.getGuestLearningWordsEntityList();
+
         LearningWordsEntity learningWordsEntity = learningWordsEntityList.get(Integer.valueOf(learningWordsPosition.trim()));
 
         //튜토리얼 학습을 위한 문제의 임시보기를 만든다
@@ -139,11 +152,12 @@ public class BillyWordsLearningController {
         model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
 
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
-        //튜토리얼은 무조건 EN으로 세팅
-        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals("EN")).findFirst();
+        //튜토리얼은 문제는 처음에 선택한 언어로
+        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(prefecture.toUpperCase())).findFirst();
 
         model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
         model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
+        model.addAttribute("prefecture", prefecture);
 
         return "page/guest-words-test";
     }

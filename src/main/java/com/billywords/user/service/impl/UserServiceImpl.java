@@ -100,15 +100,12 @@ public class UserServiceImpl implements UserService {
         usersEntityRepository.save(usersEntity);
     }
 
-    @Override
-    public UsersEntity findByEmail(String email) {
-        return usersEntityRepository.findByEmail(email);
-    }
+
 
     @Override
     public Map<String, String> emailUniqueCheck(String email) {
 
-        Optional<UsersEntity> byEmailOptional = Optional.ofNullable(usersEntityRepository.findByEmail(email));
+        Optional<UsersEntity> byEmailOptional = usersEntityRepository.findByEmail(email);
         Map<String, String> returnValue = new HashMap<>();
 
         if(byEmailOptional.isPresent()) {

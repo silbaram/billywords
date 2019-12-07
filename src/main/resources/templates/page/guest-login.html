@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+                layout:decorator="layouts/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Billy Words Test Sign Up</title>
+    <link rel="stylesheet" href="/css/commmon.css">
+</head>
+<body>
+
+    <div id="wrapper" layout:fragment="content">
+        <section>
+            <form class="signup_contain" action="/words-test/guest">
+                <div class="lang-list">
+                    <label for="language"><img src="../images/svg/lang.svg" alt="" height="50"></label>
+                    <select onchange="optSelValue()" name="prefecture" id="language" autofocus required>
+                        <option value="Check overlap ID">Your language</option>
+                        <option value="cn">CN 中国</option>
+                        <option value="de">DE Deutschland</option>
+                        <option value="es">ES Español</option>
+                        <option value="fr">FR France</option>
+                        <option value="id">ID Indonesia</option>
+                        <option value="in">IN हिन्दी</option>
+                        <option value="jp">JP 日本</option>
+                        <option value="ko">KR 대한민국</option>
+                        <option value="pt">PT Português</option>
+                        <option value="ru">RU Pусский</option>
+                        <option value="sa">SA السعودية</option>
+                        <option value="vn">VN Việt</option>
+                    </select>
+                </div>
+                <div class="submit">
+                    <input type="submit" value="Start">
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script src="/js/countryCode.js"></script>
+</body>
+</html>

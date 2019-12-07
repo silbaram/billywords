@@ -21,27 +21,14 @@ public class UserController {
 
 
 
-//    // 로그인
-//    @RequestMapping("/login")
-//    public String login(Model model, String error, String logout, HttpServletRequest request ){
-//        if (logout != null){
-//            model.addAttribute("logout", "You have been logged out successfully.");
-//        }
-//        return "page/login";
-//    }
+    /**
+     * 게스트 로그인 페이지(학습하고자 하는 단언 선택)
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "guest-login")
+    public String guestStudyWordsSelect(Model model) {
 
-//    // 로그인 실패시
-//    @RequestMapping(value="/loginError")
-//    public String loginError(Model model, String username ){
-//        model.addAttribute("error", "Your username and password is invalid.");
-//        model.addAttribute("username",username);
-//        return "login.html";
-//    }
-
-//    // 회원가입폼
-//    @RequestMapping(value="/registration", method=RequestMethod.GET)
-//    public String registration(Model model){
-//        model.addAttribute("userForm", new UserVO());
-//        return "page/registration";
-//    }
+        return "page/guest-login";
+    }
 }

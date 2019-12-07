@@ -50,7 +50,7 @@
         </div>
         <div class="anser_contain">
             <div class="anser" th:each="example, i : ${learningWordsExampleList}">
-                <p th:text="${example.getWordSpellingEntity().getWordSpelling()}" th:value="${example.getWordSpellingEntity().getWordsGroupEntity().getId()}" onclick="isWordQuestionCorrect(this)"></p>
+                <p th:class="|anser0${i.count}|" th:text="${example.getWordSpellingEntity().getWordSpelling()}" th:value="${example.getWordSpellingEntity().getWordsGroupEntity().getId()}" onclick="isWordQuestionCorrect(this)"></p>
             </div>
         </div>
         <div class="hint_contain">
@@ -59,15 +59,29 @@
 
     </section>
 
+    <!-- 2019 11 16 틀린 답 클릭시 아이콘 추가 ↓ -->
+    <section>
+        <div class="wrong_icon" >
+            <img src="/images/svg/wrong.svg" alt="">
+        </div>
+    </section>
+    <section>
+        <div class="pleaseSignup" >
+            <a href="/registration"><p>가입해주세요</p></a>
+        </div>
+    </section>
+
     <script src="/js/menuDrop.js"></script>
     <script src="/js/changeLang.js"></script>
     <script src="/js/changeWordPart.js"></script>
+    <script src="/js/anserWorng.js"></script>
     <script src="/js/ajax/guestWordsTest.js"></script>
 
     <form name="nextExample" id="nextExample">
         <input type="hidden" id="learningWordsGroupEntityId" th:value="${learningWordsGroupEntityId}">
         <input type="hidden" id="learningWordsEntityList" th:value="${learningWordsEntityList}">
         <input type="hidden" id="learningWordsPosition" name="learningWordsPosition" th:value="${learningWordsPosition}">
+        <input type="hidden" id="prefecture" name="prefecture" th:value="${prefecture}">
     </form>
 </div>
 

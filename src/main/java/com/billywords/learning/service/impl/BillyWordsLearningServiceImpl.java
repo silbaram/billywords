@@ -33,7 +33,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
     private int maxNumber;
 
     @Value("${word.example.guest.id}")
-    private int guestId;
+    private String guestEmail;
 
     @Autowired
     ExampleEntityRepository exampleEntityRepository;
@@ -69,7 +69,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
      */
     @Override
     public List<LearningWordsEntity> getGuestLearningWordsEntityList() {
-        Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(guestId);
+        Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findByEmail(guestEmail);
         return usersEntityOptional.map(usersEntity -> learningWordsEntityRepository.findByUsersEntity(usersEntity)).orElse(null);
     }
 
@@ -159,7 +159,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         int spellingEntityNumber = spellingEntityOptional.isPresent() ? spellingEntityOptional.get().getWordsGroupEntity().getImportance() : 1;
 
         //유저 정보를 찾는다
-        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(guestId);
+        final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findByEmail(guestEmail);
         if(usersEntityOptional.isPresent()) {
 
             int[] exampleNumber = new int[6];

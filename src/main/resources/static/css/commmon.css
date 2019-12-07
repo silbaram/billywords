@@ -38,12 +38,12 @@ header h1{
 }
 
 footer{
-	display: inline-block;
+	/* display: inline-block; */
 	width: 100%;
 	text-align: center;
 	font-size: 0.5rem;
 	color: #aaaaaa;
-	position: fixed;
+	position: absolute;
 	left: 0;
 	bottom: 0;
 	height: 20px;
@@ -89,7 +89,6 @@ form input[type="password"]{
 	width: 85%;
 	height: 35px;
 	border: 1px solid #2191b3;
-	font: 1.5rem;
 	font-size: 1.2rem;
 	vertical-align: top;
 }
@@ -97,7 +96,6 @@ form select[name="prefecture"]{
 	width: 85%;
 	height: 35px;
 	border: 1px solid #2191b3;
-	font: 1.5rem;
 	font-size: 1.2rem;
 	vertical-align: top;
 }
@@ -105,7 +103,6 @@ form select[name="prefecture"]{
 	height: 20px;
 	margin: 0;
 	padding: 3px 0;
-	font: 1rem;
 	color: #dd4848;
 }
 .wrongmassge .worngoff{
@@ -163,13 +160,19 @@ a:hover{
 	color: rgb(131, 131, 131);
 	text-decoration: none;
 }
+.guest{
+	margin: 8px auto 30px auto;
+	width: 80%;
+	text-align: center;
+}
+
 .lostpass{
 	margin: 8px auto 0 auto;
 	width: 80%;
 	text-align: center;
 }
 .line{
-	margin: 50px auto;
+	margin: 50px auto 30px auto;
 	width: 90%;
 	border: 1px solid #aaaaaa;
 }
@@ -231,6 +234,7 @@ a:hover{
 
 }
 .menu_dropdown{
+	z-index: 10;
 	display: none;
 	position: absolute;
 	overflow: auto;
@@ -304,6 +308,10 @@ a:hover{
 	margin: 30px auto;
 	text-align: center;
 	font-size: 1.5rem;
+	/* 2019 11 16 클릭가능하게 뎁스 수정 ↓ */
+	position: relative;
+	z-index: 0;
+	/* 2019 11 16 클릭가능하게 뎁스 수정 ↑ */
 }
 .anser_contain .anser{
 	display: inline;
@@ -320,6 +328,8 @@ a:hover{
 .anser_contain .anserWorng{
 	color: #ffffff73;
 	background-color: #8686863a;
+	pointer-events: none;
+
 	border-bottom: 1px solid #7070702d;
 	animation: fadein 1s;
 }
@@ -334,3 +344,105 @@ a:hover{
 .hint_contain{
 	display: none;
 }
+/* 2019 11 16 틀린 답 클릭시 아이콘 추가 ↓ */
+/* wrong_icon */
+.wrong_icon{
+	position: relative;
+	pointer-events: none;
+	margin: -130% auto;
+	padding: 30px;
+	opacity: 0;
+}
+@keyframes fadeout {
+	0%{
+		opacity: 0;
+		left: 0px;
+
+	}
+	10%{
+		opacity: 0.9;
+		left: 10px;
+	}
+	20%{
+		left: 30px;
+	}
+	30%{
+		left: -10px;
+
+	}
+	40%{
+		left: 30px;
+	}
+	50%{
+		left: -10px;
+
+	}
+	60%{
+		opacity: 0.9;
+		left: 30px;
+
+	}
+	70%{
+		left: -5px;
+
+	}
+	100%{
+		opacity: 0;
+		left: -10px;
+	}
+}
+@media screen and (min-width: 769px){
+	.wrong_icon{
+		position: relative;
+		pointer-events: none;
+		margin: -100% auto;
+		padding: 100px;
+		opacity: 0;
+	}
+}
+.pleaseSignup{
+	width: 100%;
+	height: 100%;
+	padding: 50% 0;
+	color: #ffffff;
+	position: fixed;
+	top: 100%;
+	background: #00c3ffe7;
+}
+@keyframes up{
+	0%{
+		top: 100%
+	}
+	100%{
+		top: 0%
+	}
+}
+.pleaseSignup p{
+	text-align: center;
+	color: #ffffff;
+	margin: 10px;
+	padding: 10px;
+	border: 1px solid #ffffff2a;
+	font-size: 3rem;
+	background-color: #00c3ff;
+}
+.finshed{
+	width: 100%;
+	height: 100%;
+	padding: 50% 0;
+	color: #ffffff;
+	position: fixed;
+	background: #00c3ff;
+}
+.finshed p{
+	text-align: center;
+	color: #ffffff;
+	margin: 10px;
+	padding: 10px;
+	border: 1px solid #ffffff2a;
+	font-size: 3rem;
+	background-color: #00c3ff;
+}
+
+/* 2019 11 16 틀린 답 클릭시 아이콘 추가 ↑ */
+
