@@ -8,11 +8,6 @@ function isWordQuestionCorrect(obj) {
         learningWordsGroupEntityId : $("#learningWordsGroupEntityId").val()
     };
 
-    if(Number($("#learningWordsPosition").val()) === Number($("#learningWordsEntityTotalCount").val())) {
-        pleaseSignupUp();
-        return;
-    }
-
     $.ajax({
         type: "PATCH",
         url: "/words-test/exam-question",
@@ -33,8 +28,13 @@ function successFunction(data, obj){
     if(data.status !== "200" && solvedProblemCount < solvedProblemChallengeCount) {
         solvedProblemCount++;
         anserWorngChange(obj.className);
+        wrong_iconEvent();
     // 문제풀 기회를 넘었거나 정답이면
     } else {
+        if(Number($("#learningWordsPosition").val()) === Number($("#learningWordsEntityTotalCount").val())) {
+            pleaseSignupUp();
+            return;
+        }
         // 다음 문제 요청
         nextExample();
     }

@@ -27,6 +27,7 @@ function successFunction(data, obj){
     if(data.status !== "200" && solvedProblemCount < solvedProblemChallengeCount) {
         solvedProblemCount++;
         anserWorngChange(obj.className);
+        wrong_iconEvent();
     // 문제풀 기회를 넘었거나 정답이면
     } else {
         //정답이면

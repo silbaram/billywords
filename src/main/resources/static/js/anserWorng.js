@@ -1,12 +1,6 @@
-window.onload = function clickAnser(){
-    document.querySelector(".anser01").addEventListener("click", wrong_iconEvent);
-    document.querySelector(".anser02").addEventListener("click", wrong_iconEvent);
-    document.querySelector(".anser03").addEventListener("click", wrong_iconEvent);
-    document.querySelector(".anser04").addEventListener("click", wrong_iconEvent);
-    document.querySelector(".anser05").addEventListener("click", wrong_iconEvent);
-    document.querySelector(".anser06").addEventListener("click", wrong_iconEvent);
-
-}
+// window.onload = function clickAnser(taget){
+//     document.querySelector("." + taget).addEventListener("click", wrong_iconEvent);
+// }
 
 
 function anserWorngChange(clicked_class){

@@ -181,4 +181,15 @@ public class BillyWordsLearningController {
 
         return "redirect:/words-test";
     }
+
+
+    /**
+     * 모든 문제를 다 풀었을때 축하 페이지
+     * @param wordUser
+     * @return
+     */
+    @RequestMapping(value = "/finished", method = RequestMethod.GET)
+    public String billyFinished(@AuthenticationPrincipal WordUser wordUser) {
+        return "page/words-finished";
+    }
 }
