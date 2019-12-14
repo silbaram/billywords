@@ -19,5 +19,5 @@ public interface BillyWordsLearningService {
 
     public LearningWordsEntity nextLearningWordsEntity(WordUser wordUser);
 
-    public void createNextLearningWordsEntity(WordUser wordUser);
+    public boolean createNextLearningWordsEntity(WordUser wordUser);
 }

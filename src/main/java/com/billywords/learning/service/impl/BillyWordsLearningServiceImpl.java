@@ -303,8 +303,9 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
      * 현재 학습한 단어를 완료하고 다음 문제랑 교체
      * @param wordUser
      */
+    public boolean createNextLearningWordsEntity(WordUser wordUser) {
 
-    public void createNextLearningWordsEntity(WordUser wordUser) {
+        boolean isFinish = false;
 
         // 학습중인 단어
         LearningWordsEntity learningWordsEntity = getLearningWordsEntity(wordUser.getUserId(), true);
@@ -316,17 +317,25 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
             int maxId = wordsGroupEntityList.stream().map(WordsGroupEntity::getImportance).max(Integer::compare).orElse(0);
 
             WordsGroupEntity wordsGroupEntity = wordsGroupEntityRepository.findByImportance(maxId + 1);
-            LearningWordsEntity saveLearningWordsEntity = new LearningWordsEntity();
-            saveLearningWordsEntity.setUsersEntity(usersEntityOptional.get());
-            saveLearningWordsEntity.setWordsGroupEntity(wordsGroupEntity);
-            saveLearningWordsEntity.setWrongCount(0);
-            saveLearningWordsEntity.setCorrectCount(0);
-            saveLearningWordsEntity.setHintCount("0");
-            saveLearningWordsEntity.setIsLearning(true);
+            if(wordsGroupEntity == null) {
+                isFinish = true;
+            } else {
+                LearningWordsEntity saveLearningWordsEntity = new LearningWordsEntity();
+                saveLearningWordsEntity.setUsersEntity(usersEntityOptional.get());
+                saveLearningWordsEntity.setWordsGroupEntity(wordsGroupEntity);
+                saveLearningWordsEntity.setWrongCount(0);
+                saveLearningWordsEntity.setCorrectCount(0);
+                saveLearningWordsEntity.setHintCount("0");
+                saveLearningWordsEntity.setIsLearning(true);
 
-            learningWordsEntityRepository.save(saveLearningWordsEntity);
+                learningWordsEntityRepository.save(saveLearningWordsEntity);
+
+                isFinish = false;
+            }
         }
 
         learningWordsEntityRepository.delete(learningWordsEntity);
+
+        return isFinish;
     }
 }

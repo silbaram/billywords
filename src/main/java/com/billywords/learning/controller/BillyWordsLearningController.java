@@ -62,7 +62,7 @@ public class BillyWordsLearningController {
 
 
     /**
-     * 단어 테스트 페이지
+     * 게스트 단어 테스트 페이지
      * @param model
      * @return
      */
@@ -177,9 +177,11 @@ public class BillyWordsLearningController {
     @RequestMapping(value = "/next/exam-question", method = RequestMethod.POST)
     public String createNextWordsExamQuestion(Model model, @AuthenticationPrincipal WordUser wordUser) {
 
-        billyWordsLearningService.createNextLearningWordsEntity(wordUser);
-
-        return "redirect:/words-test";
+        if(billyWordsLearningService.createNextLearningWordsEntity(wordUser)) {
+            return "redirect:/finished";
+        } else {
+            return "redirect:/words-test";
+        }
     }
 
 
