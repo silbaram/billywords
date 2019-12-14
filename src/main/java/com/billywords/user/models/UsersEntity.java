@@ -20,6 +20,7 @@ public class UsersEntity {
     private String name;
     private Timestamp createDate;
     private Timestamp updateDate;
+    private Integer learningWordsPosition;
     private Integer isAccountNonExpired;
     private Integer isAccountNonLocked;
     private Integer isCredentialsNonExpired;
@@ -106,6 +107,16 @@ public class UsersEntity {
 
     public void setUpdateDate(Timestamp updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Basic
+    @Column(name = "learningWordsPosition")
+    public Integer getLearningWordsPosition() {
+        return learningWordsPosition;
+    }
+
+    public void setLearningWordsPosition(Integer learningWordsPosition) {
+        this.learningWordsPosition = learningWordsPosition;
     }
 
     @Basic

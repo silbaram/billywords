@@ -8,54 +8,55 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-size: 100%;
-	vertical-align: baseline;
-	background: transparent;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
 }
 body{
-	background-color: #ffffff;
+    background-color: #ffffff;
 
 
 }
 header{
-	display: none;
-	text-align: center;
+    display: none;
+    text-align: center;
 }
 @media screen and (min-width: 769px){
-	header{
-		display: inline;
-		text-align: center;
-	}
+    header{
+        display: inline;
+        text-align: center;
+    }
 }
 
 header h1{
-	padding: 10px 0 3px 0;
-	color: #ffffff;
-	background-color: #ffa600
+    padding: 10px 0 3px 0;
+    color: #ffffff;
+    background-color: #ffa600
 }
 footer{
-	display: inline-block;
-	width: 100%;
-	text-align: center;
-	font-size: 0.5rem;
-	color: #aaaaaa;
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	height: 20px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 0.5rem;
+    color: #aaaaaa;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 20px;
 }
 #wrapper{
-	width: 100%;
+
+    width: 100%;
 }
 @media screen and (min-width: 769px){
-	#wrapper{
-		margin: 0 auto;
-		width: 40%;
-	}
+    #wrapper{
+        margin: 0 auto;
+        width: 40%;
+    }
 }
 
 /* nav */
@@ -94,6 +95,27 @@ nav ul li a, a:link, a:hover, a:visited{
     padding: 5px 10px;
     height: 2.5rem;
 }
+/* ability */
+.ability_contain{
+    height: 30%;
+    width: 100%;
+}
+.ability_contain .ability{
+    width: 80%;
+    margin: 30% auto;
+    padding: 10px 30px;
+    text-align: center;
+    border: 3px solid rgba(52, 152, 219, 0.281);
+}
+.ability_contain .ability_text{
+    padding: 0 10px 0 0;
+    color: #ffa600;
+    font-size: 4rem;
+}
+.ability_contain p{
+    color: #747474;
+    font-size: 3rem;
+}
 /* graph */
 .section_graph{
     width: 100%;
@@ -105,8 +127,6 @@ nav ul li a, a:link, a:hover, a:visited{
     height: 200px;
     font-weight: bold;
     color: #3498DB;
-
-
 }
 .graph_name{
     padding: 5px 20px;
@@ -169,7 +189,7 @@ nav ul li a, a:link, a:hover, a:visited{
     right: 0;
     top: 0;
 
-} 
+}
 
 .tags_contain .tags_list span{
     padding: 5px 20px;
@@ -200,18 +220,18 @@ nav ul li a, a:link, a:hover, a:visited{
 .section_lang_list{
     margin: 0 auto;
     width: 90%;
-	text-align: center;
+    text-align: center;
 }
 .lang-list{
     margin: 5px 0;
 }
 .lang-list select[name="prefecture"]{
-	width: 100%;
-	height: 35px;
-	border: 1px solid #2191b3;
-	font: 1.5rem;
-	font-size: 1.2rem;
-	vertical-align: top;
+    width: 100%;
+    height: 35px;
+    border: 1px solid #2191b3;
+    font: 1.5rem;
+    font-size: 1.2rem;
+    vertical-align: top;
 }
 
 .section_change_pass .id_email{

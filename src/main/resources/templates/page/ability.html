@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+                layout:decorator="layouts/myLayout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Billy Words Test</title>
+    <link rel="stylesheet" href="/css/id.css">
+</head>
+<body>
+
+    <div id="wrapper" layout:fragment="content">
+        <nav>
+            <ul>
+                <li><a href="#">Ability</a></li>
+                <li class="cl-changeAccount"><a href="../html/billyPersonal.html">계정관리</a></li>
+            </ul>
+            <div class="nav_back">
+                <a href="/words-test"><img src="../images/svg/back.svg" alt=""></a>
+            </div>
+        </nav>
+        <section class="ability_contain">
+            <div class="ability">
+                <p>You are in</p>
+                <p class="ability_text" th:text="${learningWordsPosition}"></p>
+                <p>of 4000 total.</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="/js/countryCode.js"></script>
+</body>
+</html>

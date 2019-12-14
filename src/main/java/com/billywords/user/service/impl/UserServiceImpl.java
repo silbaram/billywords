@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
         usersEntity.setFromLanguage(user.getFromLanguage().toUpperCase());
         usersEntity.setToLanguage("EN"); //학습 언어는 기본으로 EN
         usersEntity.setCreateDate(ts);
+        usersEntity.setLearningWordsPosition(1);
         usersEntityRepository.save(usersEntity);
 
         // 사용자 권한 저장
@@ -101,7 +102,11 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
+    /**
+     * 회원 가입시 이메일 유일 체크
+     * @param email
+     * @return
+     */
     @Override
     public Map<String, String> emailUniqueCheck(String email) {
 

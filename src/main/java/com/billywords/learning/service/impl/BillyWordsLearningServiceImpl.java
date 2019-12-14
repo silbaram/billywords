@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -312,7 +309,9 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
         final Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(wordUser.getUserId());
         if(usersEntityOptional.isPresent()) {
-            List<WordsGroupEntity> wordsGroupEntityList = usersEntityOptional.get().getLearningWordsEntityList().stream().map(LearningWordsEntity::getWordsGroupEntity).collect(Collectors.toList());
+            UsersEntity usersEntity = usersEntityOptional.get();
+            List<LearningWordsEntity> userLearningWordsEntityList = usersEntity.getLearningWordsEntityList();
+            List<WordsGroupEntity> wordsGroupEntityList = usersEntity.getLearningWordsEntityList().stream().map(LearningWordsEntity::getWordsGroupEntity).collect(Collectors.toList());
 
             int maxId = wordsGroupEntityList.stream().map(WordsGroupEntity::getImportance).max(Integer::compare).orElse(0);
 
@@ -321,21 +320,47 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
                 isFinish = true;
             } else {
                 LearningWordsEntity saveLearningWordsEntity = new LearningWordsEntity();
-                saveLearningWordsEntity.setUsersEntity(usersEntityOptional.get());
+                saveLearningWordsEntity.setUsersEntity(usersEntity);
                 saveLearningWordsEntity.setWordsGroupEntity(wordsGroupEntity);
                 saveLearningWordsEntity.setWrongCount(0);
                 saveLearningWordsEntity.setCorrectCount(0);
                 saveLearningWordsEntity.setHintCount("0");
                 saveLearningWordsEntity.setIsLearning(true);
-
                 learningWordsEntityRepository.save(saveLearningWordsEntity);
+
+                // usersEntity 에도 추가
+                userLearningWordsEntityList.add(saveLearningWordsEntity);
 
                 isFinish = false;
             }
+
+            learningWordsEntityRepository.delete(learningWordsEntity);
+
+            // usersEntity 에도 삭제
+            usersEntity.setLearningWordsEntityList(userLearningWordsEntityList.stream().filter(x -> !x.equals(learningWordsEntity)).collect(Collectors.toList()));
+            usersEntity.setLearningWordsPosition(usersEntity.getLearningWordsPosition() + 1);
+
+            usersEntityRepository.save(usersEntity);
         }
 
-        learningWordsEntityRepository.delete(learningWordsEntity);
-
         return isFinish;
+    }
+
+
+    /**
+     * 사용자의 학습 진요 수치를 보여준다.
+     * @param id
+     * @return
+     */
+    @Override
+    public int getLearningWordsPosition(Integer id) {
+        int learningWordsPosition = 1;
+
+        Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(id);
+        if(usersEntityOptional.isPresent()) {
+            learningWordsPosition = usersEntityOptional.get().getLearningWordsPosition();
+        }
+
+        return learningWordsPosition;
     }
 }

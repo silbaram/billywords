@@ -11,7 +11,7 @@ public interface BillyWordsLearningService {
     public List<ExampleEntity> createWordExample(Integer id, String fromLanguage, String toLanguage, LearningWordsEntity learningWordsEntity);
     public List<ExampleEntity> createGuestWordExample(LearningWordsEntity learningWordsEntity);
 
-    public LearningWordsEntity getLearningWordsEntity(Integer userEmail, Boolean isLearning);
+    public LearningWordsEntity getLearningWordsEntity(Integer id, Boolean isLearning);
     public List<LearningWordsEntity> getGuestLearningWordsEntityList();
 
     public boolean isWordQuestionCorrect(Integer id, WordsProblemVO wordsProblem);
@@ -20,4 +20,6 @@ public interface BillyWordsLearningService {
     public LearningWordsEntity nextLearningWordsEntity(WordUser wordUser);
 
     public boolean createNextLearningWordsEntity(WordUser wordUser);
+
+    public int getLearningWordsPosition(Integer id);
 }
