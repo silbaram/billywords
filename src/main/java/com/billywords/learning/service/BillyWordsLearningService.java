@@ -22,4 +22,6 @@ public interface BillyWordsLearningService {
     public boolean createNextLearningWordsEntity(WordUser wordUser);
 
     public int getLearningWordsPosition(Integer id);
+
+    public void changeLearningWord(WordUser wordUser);
 }

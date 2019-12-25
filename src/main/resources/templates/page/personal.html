@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+                layout:decorator="layouts/myLayout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Billy Words Test</title>
+    <link rel="stylesheet" href="/css/id.css">
+</head>
+<body>
+
+    <div id="wrapper" layout:fragment="content">
+        <nav>
+            <ul>
+                <li><a href="/my-page/ability">Ability</a></li>
+                <li><a href="#;">계정관리</a></li>
+            </ul>
+            <div class="nav_back">
+                <a href="/words-test"><img src="../images/svg/back.svg" alt=""></a>
+            </div>
+        </nav>
+        <section class="section_change_pass">
+            <div class="id_email">
+                <p>fjdskl@fdjslka.com</p>
+            </div>
+            <section class="section_lang_list">
+                <div class="lang-list">
+                    <select onchange="optSelValue()" name="prefecture" id="language"  autofocus required>
+                        <!-- 11 28 국가코드 수정 ↓ -->
+                        <!-- 11 28 모국어 선택 메세지 (value 값 지웠음) ↓ -->
+                        <option value="">Your language</option>
+                        <!-- 11 28 모국어 선택 메세지 (value 값 지웠음) ↓ -->
+                        <option value="AR">AR السعودية</option>
+                        <option value="BN">BN বাঙালি</option>
+                        <option value="DE">DE Deutschland</option>
+                        <option value="ES">ES Español</option>
+                        <option value="FR">FR France</option>
+                        <option value="HI">HI हिन्दी</option>
+                        <option value="IT">IT Italia</option>
+                        <option value="JP">JP 日本</option>
+                        <option value="JV">JV Basa Jawa</option>
+                        <option value="KO">KO 대한민국</option>
+                        <option value="PT">PT Português</option>
+                        <option value="RU">RU Pусский</option>
+                        <option value="VN">VN Việt</option>
+                        <option value="ZH">ZH 中国</option>
+                        <!-- 11 28 국가코드 수정 ↑ -->
+                    </select>
+                </div>
+            </section>
+            <form>
+                <p class="change-pw">비밀번호 변경하기</p>
+                <div >
+                    <input type="password" name="password" placeholder="Password" autofocus required>
+                    <input class="change-pw-new" type="password" name="new_password" placeholder="새 Password" required>
+                    <input class="change-pw-new-cha" type="password" name="new_repassword" placeholder="새 Password 확인" required>
+                </div>
+                <div>
+                    <input class="change-submit-pw" type="submit" value="비밀번호 변경하기">
+                </div>
+            </form>
+        </section>
+        <section class="section_del_account">
+            <div class="del_account">
+                <p>계정삭제</p>
+                <div>
+                    <input type="button" value="탈퇴하시겠습니까?" onclick="secession()">
+                </div>
+            </div>
+        </section>
+        <form action="/secession" method="post" id="secessionForm"></form>
+
+        <script>
+            function secession() {
+                if(confirm('탈톼하시겠습니까?')) {
+                    $("#secessionForm").submit();
+                }
+            }
+        </script>
+        <script src="/js/countryCode.js"></script>
+    </div>
+</body>
+</html>

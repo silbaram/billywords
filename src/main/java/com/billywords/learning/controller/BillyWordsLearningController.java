@@ -45,6 +45,7 @@ public class BillyWordsLearningController {
         if(learningWordsEntity.getExampleEntityList().size() == 0) {
             //학습을 위한 문제의 보기를 만든다
             List<ExampleEntity> exampleEntityList = billyWordsLearningService.createWordExample(wordUser.getUserId(), wordUser.getFromLanguage(), wordUser.getToLanguage(), learningWordsEntity);
+
             model.addAttribute("learningWordsExampleList", exampleEntityList);
         } else {
             model.addAttribute("learningWordsExampleList", learningWordsEntity.getExampleEntityList());
@@ -164,6 +165,25 @@ public class BillyWordsLearningController {
         model.addAttribute("prefecture", prefecture);
 
         return "page/guest-words-test";
+    }
+
+
+    /**
+     * 사용자가 학습중인 단여를 서로 바꿀때 (2차 진행)
+     * 학습을 완료 하면 다음단계로 모국어랑 영어랑 바꾸어서 처음주터 진행 되도록 << 이직 이부분은 진행단계
+     * @param wordUser
+     * @return
+     */
+    @RequestMapping(value = "/change-learning-word")
+    public String changeLearningWord(@AuthenticationPrincipal WordUser wordUser) {
+
+        if(wordUser == null) {
+            return "redirect:/words-test";
+        }
+
+        billyWordsLearningService.changeLearningWord(wordUser);
+
+        return "redirect:/words-test";
     }
 
 

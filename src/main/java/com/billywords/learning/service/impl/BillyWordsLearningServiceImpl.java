@@ -16,10 +16,12 @@ import com.billywords.words.repository.WordSpellingEntityRepository;
 import com.billywords.words.repository.WordsGroupEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
@@ -46,6 +48,7 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
 
     @Autowired
     WordsGroupEntityRepository wordsGroupEntityRepository;
+
 
 
     /**
@@ -362,5 +365,23 @@ public class BillyWordsLearningServiceImpl implements BillyWordsLearningService 
         }
 
         return learningWordsPosition;
+    }
+
+
+    /**
+     * 사용자가 학습중인 단여를 서로 바꿀때
+     * @param wordUser
+     */
+    @Override
+    public void changeLearningWord(WordUser wordUser) {
+        Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(wordUser.getUserId());
+        if(usersEntityOptional.isPresent()) {
+            UsersEntity usersEntity = usersEntityOptional.get();
+            String fromLanguage = usersEntity.getFromLanguage();
+            usersEntity.setFromLanguage(usersEntity.getToLanguage());
+            usersEntity.setToLanguage(fromLanguage);
+
+            usersEntityRepository.save(usersEntity);
+        }
     }
 }

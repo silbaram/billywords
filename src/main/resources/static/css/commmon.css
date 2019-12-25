@@ -92,7 +92,7 @@ form input[type="password"]{
 	font-size: 1.2rem;
 	vertical-align: top;
 }
-form select[name="prefecture"]{
+form select[name="fromLanguage"]{
 	width: 85%;
 	height: 35px;
 	border: 1px solid #2191b3;

@@ -1,11 +1,14 @@
 package com.billywords.user.service.impl;
 
+import com.billywords.learning.repository.ExampleEntityRepository;
 import com.billywords.security.models.AuthorityEntity;
 import com.billywords.security.repository.AuthorityEntityRepository;
 import com.billywords.user.models.UsersEntity;
 import com.billywords.user.repository.UsersEntityRepository;
 import com.billywords.user.service.UserService;
 import com.billywords.user.vo.UserVO;
+import com.billywords.user.vo.WordUser;
+import com.billywords.words.models.ExampleEntity;
 import com.billywords.words.models.LearningWordsEntity;
 import com.billywords.words.models.WordsGroupEntity;
 import com.billywords.words.repository.LearningWordsEntityRepository;
@@ -38,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private LearningWordsEntityRepository learningWordsEntityRepository;
+
+    @Autowired
+    private ExampleEntityRepository exampleEntityRepository;
 
     @Value("${word.learning.create.max}")
     private int maxNumber;
@@ -120,5 +126,32 @@ public class UserServiceImpl implements UserService {
         }
 
         return returnValue;
+    }
+
+
+
+    @Override
+    @Transactional
+    public boolean secession(WordUser wordUser) {
+        Optional<UsersEntity> usersEntityOptional = usersEntityRepository.findById(wordUser.getUserId());
+
+        if(usersEntityOptional.isPresent()) {
+
+            UsersEntity usersEntity = usersEntityOptional.get();
+
+            //탈퇴 데이터 삭제
+            Optional<LearningWordsEntity> learningWordsEntity = usersEntity.getLearningWordsEntityList().stream().filter(x -> x.getIsLearning()).findFirst();
+            if(learningWordsEntity.isPresent()) {
+                List<ExampleEntity> exampleEntityList = learningWordsEntity.get().getExampleEntityList();
+                exampleEntityRepository.deleteAll(exampleEntityList);
+            }
+
+            learningWordsEntityRepository.deleteAll(usersEntity.getLearningWordsEntityList());
+
+            authorityEntityRepository.deleteAll(usersEntity.getAuthorityEntityList());
+            usersEntityRepository.delete(usersEntity);
+        }
+
+        return true;
     }
 }

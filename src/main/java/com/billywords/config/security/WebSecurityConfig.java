@@ -33,13 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
         .csrf().disable()//TODO 개발에서만 추가
         .authorizeRequests()
-        // 해당 url 을 허용한다.
-        .antMatchers("/**").permitAll()
-        // admin 폴더에 경우 admin 권한이 있는 사용자에게만 허용
-        .antMatchers("/admin/**").hasAuthority("ADMIN")
         // user 폴더에 경우 user 권한이 있는 사용자에게만 허용
-        .antMatchers("/my-page/**").hasAuthority("USER")
-        .anyRequest().authenticated()
+        .antMatchers("/my-page/**").authenticated()
         .and()
         .formLogin()
         .loginPage("/login")
@@ -52,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-        .logoutSuccessUrl("/").and().exceptionHandling()
+        .logoutSuccessUrl("/login").and().exceptionHandling()
         .and()
         .exceptionHandling().accessDeniedPage("/403");
     }
