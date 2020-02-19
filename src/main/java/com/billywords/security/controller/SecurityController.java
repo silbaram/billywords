@@ -22,9 +22,15 @@ public class SecurityController {
 
 
 
+    @RequestMapping("/")
+    public String redirectLogin(Model model, String error, String logout, HttpServletRequest request ) {
+
+        return "redirect:/login";
+    }
+
     // 로그인
     @RequestMapping("/login")
-    public String login(Model model, String error, String logout, HttpServletRequest request ){
+    public String login(Model model, String error, String logout, HttpServletRequest request ) {
         if (logout != null){
             model.addAttribute("logout", "You have been logged out successfully.");
         }
@@ -36,7 +42,7 @@ public class SecurityController {
     // 회원가입 시 email 유니트 체크
     @ResponseBody
     @RequestMapping(value="/email-unique-check", method= RequestMethod.GET)
-    public Map<String, String> emailUniqueCheck(@RequestParam String email){
+    public Map<String, String> emailUniqueCheck(@RequestParam String email) {
 
         return userService.emailUniqueCheck(email);
     }
@@ -45,7 +51,7 @@ public class SecurityController {
 
     // 회원가입폼
     @RequestMapping(value="/registration", method=RequestMethod.GET)
-    public String registration(Model model){
+    public String registration(Model model) {
         model.addAttribute("userForm", new UserVO());
         return "page/registration";
     }
@@ -54,7 +60,7 @@ public class SecurityController {
 
     // 회원가입 처리
     @RequestMapping(value="/registration",method= RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") UserVO userForm, BindingResult bindingResult, Model model){
+    public String registration(@ModelAttribute("userForm") UserVO userForm, BindingResult bindingResult, Model model) {
 
         userService.saveUser(userForm, UserType.USER.toString());
 
