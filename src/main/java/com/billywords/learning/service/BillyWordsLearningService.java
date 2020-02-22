@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BillyWordsLearningService {
     public List<ExampleEntity> createWordExample(Integer id, String fromLanguage, String toLanguage, LearningWordsEntity learningWordsEntity);
-    public List<ExampleEntity> createGuestWordExample(LearningWordsEntity learningWordsEntity);
+    public List<ExampleEntity> createGuestWordExample(LearningWordsEntity learningWordsEntity, String prefecture);
 
     public LearningWordsEntity getLearningWordsEntity(Integer id, Boolean isLearning);
     public List<LearningWordsEntity> getGuestLearningWordsEntityList();

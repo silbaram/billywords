@@ -26,6 +26,11 @@ public class BillyWordsLearningController {
     @Autowired
     BillyWordsLearningServiceImpl billyWordsLearningService;
 
+    @Value("${word.learning.ttl.rul}")
+    private String ttlUrl;
+
+    private static String guestLearningWord = "EN";
+
 
     /**
      * 단어 테스트 페이지
@@ -54,8 +59,10 @@ public class BillyWordsLearningController {
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
         Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(wordUser.getToLanguage())).findFirst();
 
-        model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
+        String learningWord = returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "";
+        model.addAttribute("learningWord", learningWord);
         model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
+        model.addAttribute("ttlUrl", ttlUrl.replace("#WORD#", learningWord));
 
         return "page/words-test";
     }
@@ -77,18 +84,20 @@ public class BillyWordsLearningController {
         LearningWordsEntity learningWordsEntity = learningWordsEntityList.get(0);
 
         //튜토리얼 학습을 위한 문제의 임시보기를 만든다
-        List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity);
+        List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity, prefecture);
         model.addAttribute("learningWordsExampleList", exampleEntityList);
         model.addAttribute("learningWordsPosition", 1);
         model.addAttribute("learningWordsGroupEntityId", learningWordsEntity.getWordsGroupEntity().getId());
 
-        //튜토리얼은 문제는 처음에 선택한 언어로
+        //튜토리얼 문제는 처음에 선택한 언어로
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
-        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(prefecture.toUpperCase())).findFirst();
+        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(guestLearningWord)).findFirst();
 
-        model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
+        String learningWord = returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "";
+        model.addAttribute("learningWord", learningWord);
         model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());
         model.addAttribute("prefecture", prefecture);
+        model.addAttribute("ttlUrl", ttlUrl.replace("#WORD#", learningWord));
 
         return "page/guest-words-test";
     }
@@ -149,7 +158,7 @@ public class BillyWordsLearningController {
         LearningWordsEntity learningWordsEntity = learningWordsEntityList.get(Integer.valueOf(learningWordsPosition.trim()));
 
         //튜토리얼 학습을 위한 문제의 임시보기를 만든다
-        List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity);
+        List<ExampleEntity> exampleEntityList = billyWordsLearningService.createGuestWordExample(learningWordsEntity, prefecture);
         model.addAttribute("learningWordsExampleList", exampleEntityList);
         model.addAttribute("learningWordsEntityList", learningWordsEntityList.toArray());
         model.addAttribute("learningWordsPosition", Integer.valueOf(learningWordsPosition.trim()) + 1);
@@ -158,7 +167,7 @@ public class BillyWordsLearningController {
 
         List<WordSpellingEntity> wordSpellingEntityList = learningWordsEntity.getWordsGroupEntity().getWordSpellingEntityList();
         //튜토리얼은 문제는 처음에 선택한 언어로
-        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(prefecture.toUpperCase())).findFirst();
+        Optional<WordSpellingEntity> returnWordSpellingEntityOptional = wordSpellingEntityList.stream().filter(x -> x.getLanguageCode().equals(guestLearningWord)).findFirst();
 
         model.addAttribute("learningWord", returnWordSpellingEntityOptional.isPresent() ? returnWordSpellingEntityOptional.get().getWordSpelling() : "");
         model.addAttribute("part", learningWordsEntity.getWordsGroupEntity().getPartsOfSpeech());

@@ -67,3 +67,8 @@ function nextExamQuestion() {
     frm.method = "post";
     frm.submit();
 }
+
+function callTtl() {
+    var ttlUrl = $('#ttlUrl').val();
+    $('#ttlCall').attr('src', ttlUrl);
+}

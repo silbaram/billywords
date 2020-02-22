@@ -28,13 +28,13 @@
                 <a onclick="changeWordPart(this.text)" href="#">Adverb</a>
             </div>
         </div>
-        <div class="exchange">
-            <div class="box" onclick="langExchange()">
-                <p class="lang_left">Kr</p>
-                <img src="/images/svg/exchange.svg" alt="" >
-                <p class="lang_right">En</p>
-            </div>
-        </div>
+<!--        <div class="exchange">-->
+<!--            <div class="box" onclick="langExchange()">-->
+<!--                <p class="lang_left">Kr</p>-->
+<!--                <img src="/images/svg/exchange.svg" alt="" >-->
+<!--                <p class="lang_right">En</p>-->
+<!--            </div>-->
+<!--        </div>-->
 <!--        <div class="personal">-->
 <!--            <a href="../html/billyAbility.html"><img src="/images/svg/id02.svg" alt=""></a>-->
 <!--        </div>-->
@@ -84,6 +84,10 @@
         <input type="hidden" id="prefecture" name="prefecture" th:value="${prefecture}">
         <input type="hidden" id="learningWordsEntityTotalCount" name="learningWordsEntityTotalCount" th:value="${learningWordsEntityTotalCount}">
     </form>
+    <input type="hidden" id="ttlUrl" th:value="${ttlUrl}" />
+    <iframe id="ttlCall" th:src="${ttlUrl}" width="0px" height="0px" allow="autoplay;"></iframe>
+
+    <button id="say-button" onclick="callTtl()">Say!</button>
 </div>
 
 <footer>

@@ -72,6 +72,10 @@
     <script src="/js/ajax/wordsTest.js"></script>
 
     <form name="nextExample" id="nextExample"></form>
+    <input type="hidden" id="ttlUrl" th:value="${ttlUrl}" />
+    <iframe id="ttlCall" th:src="${ttlUrl}" width="0px" height="0px" allow="autoplay;"></iframe>
+
+    <button id="say-button" onclick="callTtl()">Say!</button>
 </div>
 
 <footer>
