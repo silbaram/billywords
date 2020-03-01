@@ -16,6 +16,8 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 	background: transparent;
 }
+input[type=submit] {-webkit-appearance:none;}
+
 body{
 	background-color: #ffffff;
 

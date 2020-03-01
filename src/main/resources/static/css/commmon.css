@@ -16,6 +16,8 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 	background: transparent;
 }
+input[type=submit] {-webkit-appearance:none;}
+
 body{
 	background-color: #ffffff;
 
@@ -58,6 +60,17 @@ footer{
 	}
 
 }
+.startIcon{
+	height: 100%;
+	width: 100%;
+	background-color: rgb(255, 145, 0);
+
+}
+.startIcon img{
+	padding: 100% 25%;
+	width: 50%;
+	margin-top: -50%;
+}
 .login_contain,
 .signup_contain,
 .lostpass_contain{
@@ -86,14 +99,21 @@ form label[for="language"] img{
 }
 form input[type="email"],
 form input[type="password"]{
-	width: 85%;
+	width: 80%;
 	height: 35px;
 	border: 1px solid #2191b3;
 	font-size: 1.2rem;
 	vertical-align: top;
 }
 form select[name="fromLanguage"]{
-	width: 85%;
+	width: 80%;
+	height: 35px;
+	border: 1px solid #2191b3;
+	font-size: 1.2rem;
+	vertical-align: top;
+}
+form select[name="prefecture"]{
+	width: 80%;
 	height: 35px;
 	border: 1px solid #2191b3;
 	font-size: 1.2rem;
@@ -103,6 +123,7 @@ form select[name="fromLanguage"]{
 	height: 20px;
 	margin: 0;
 	padding: 3px 0;
+	font-size: 1rem;
 	color: #dd4848;
 }
 .wrongmassge .worngoff{
@@ -133,7 +154,6 @@ form .id_overlep{
 	margin: 0 auto;
 	width: 80%;
 }
-
 form .id_overlep input{
 	position: relative;
 	top: -10px;
@@ -145,8 +165,6 @@ form .id_overlep input{
 	border: 1px solid #2191b3;
 	font-size: 1rem;
 	background-color: #3498DB;
-
-
 }
 form .remember{
 	margin: 5px auto;
@@ -308,10 +326,8 @@ a:hover{
 	margin: 30px auto;
 	text-align: center;
 	font-size: 1.5rem;
-	/* 2019 11 16 클릭가능하게 뎁스 수정 ↓ */
 	position: relative;
 	z-index: 0;
-	/* 2019 11 16 클릭가능하게 뎁스 수정 ↑ */
 }
 .anser_contain .anser{
 	display: inline;
@@ -344,13 +360,12 @@ a:hover{
 .hint_contain{
 	display: none;
 }
-/* 2019 11 16 틀린 답 클릭시 아이콘 추가 ↓ */
 /* wrong_icon */
 .wrong_icon{
 	position: relative;
 	pointer-events: none;
-	margin: -130% auto;
-	padding: 30px;
+	margin: -170% auto;
+	padding: 200px 30px;
 	opacity: 0;
 }
 @keyframes fadeout {
@@ -395,8 +410,8 @@ a:hover{
 	.wrong_icon{
 		position: relative;
 		pointer-events: none;
-		margin: -100% auto;
-		padding: 100px;
+		margin: -120% auto;
+		padding: 200px 100px;
 		opacity: 0;
 	}
 }
@@ -426,6 +441,28 @@ a:hover{
 	font-size: 3rem;
 	background-color: #00c3ff;
 }
+@media screen and (min-width: 769px){
+	.pleaseSignup{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		padding: 25% 0;
+		color: #ffffff;
+		right: 0;
+		top: 100%;
+		background: #00c3ffe7;
+	}
+	.pleaseSignup p{
+		text-align: center;
+		color: #ffffff;
+		margin: 10px;
+		padding: 10px;
+		border: 1px solid #ffffff2a;
+		font-size: 3rem;
+		background-color: #00c3ff;
+	}
+}
+
 .finshed{
 	width: 100%;
 	height: 100%;
@@ -443,6 +480,3 @@ a:hover{
 	font-size: 3rem;
 	background-color: #00c3ff;
 }
-
-/* 2019 11 16 틀린 답 클릭시 아이콘 추가 ↑ */
-
