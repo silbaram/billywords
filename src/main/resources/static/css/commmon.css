@@ -16,6 +16,8 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 	background: transparent;
 }
+input[type=submit] {-webkit-appearance:none;}
+
 body{
 	background-color: #ffffff;
 
@@ -97,6 +99,13 @@ form label[for="language"] img{
 }
 form input[type="email"],
 form input[type="password"]{
+	width: 80%;
+	height: 35px;
+	border: 1px solid #2191b3;
+	font-size: 1.2rem;
+	vertical-align: top;
+}
+form select[name="fromLanguage"]{
 	width: 80%;
 	height: 35px;
 	border: 1px solid #2191b3;
