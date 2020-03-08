@@ -1,3 +1,6 @@
+@import './iosReset.css';
+
+
 /* Reset CSS */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -58,7 +61,7 @@ footer{
 @media screen and (min-width: 769px){
     #wrapper{
         margin: 0 auto;
-        width: 40%;
+        width: 50%;
     }
 }
 
